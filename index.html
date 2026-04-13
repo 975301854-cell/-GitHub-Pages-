@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DBTI · 养鱼人16型精神图谱</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+
+    :root {
+      --bg: #080c18;
+      --surface: #0f1629;
+      --surface2: #161f35;
+      --border: #1e3058;
+      --accent: #00d4ff;
+      --accent2: #8b5cf6;
+      --accent3: #10b981;
+      --gold: #f59e0b;
+      --danger: #ef4444;
+      --pink: #ec4899;
+      --text: #e2e8f0;
+      --text-muted: #64748b;
+      --glow: 0 0 24px rgba(0,212,255,0.35);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans SC', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===== 粒子背景 ===== */
+    canvas#bg {
+      position: fixed; top:0; left:0;
+      width:100%; height:100%;
+      pointer-events:none; z-index:0;
+    }
+
+    .wrap {
+      position: relative; z-index:1;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 20px 100px;
+    }
+
+    /* ===== 首页 ===== */
+    #pg-intro { display:block; }
+    .intro-hero {
+      text-align:center;
+      padding: 56px 0 40px;
+    }
+    .hero-emoji {
+      font-size:80px;
+      display:block;
+      animation: bob 3s ease-in-out infinite;
+    }
+    @keyframes bob {
+      0%,100%{transform:translateY(0) rotate(-6deg);}
+      50%{transform:translateY(-14px) rotate(6deg);}
+    }
+    .hero-title {
+      font-size:52px; font-weight:900; letter-spacing:6px;
+      background: linear-gradient(135deg,#00d4ff,#8b5cf6,#10b981,#f59e0b);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text; margin:12px 0 6px;
+    }
+    .hero-sub {
+      font-size:17px; color:var(--text-muted); letter-spacing:2px; margin-bottom:4px;
+    }
+    .hero-en {
+      font-size:12px; color:var(--accent); letter-spacing:3px; opacity:.6; margin-bottom:44px;
+    }
+    .intro-desc {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:20px; padding:28px 32px;
+      margin-bottom:32px; text-align:left;
+    }
+    .intro-desc h3 { color:var(--accent); font-size:15px; margin-bottom:16px; letter-spacing:1px; }
+    .intro-desc p { font-size:14px; color:var(--text-muted); line-height:1.9; }
+    .intro-desc strong { color:var(--text); }
+
+    .type-preview {
+      display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:32px;
+    }
+    .tp-chip {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:12px; padding:10px 8px; text-align:center;
+      cursor:pointer; transition:all .2s;
+    }
+    .tp-chip:hover { border-color:var(--accent); background:rgba(0,212,255,.05); transform:translateY(-2px); }
+    .tp-chip-emoji { font-size:22px; margin-bottom:4px; }
+    .tp-chip-code { font-size:13px; font-weight:700; color:var(--accent); letter-spacing:1px; }
+    .tp-chip-name { font-size:11px; color:var(--text-muted); margin-top:2px; }
+
+    .btn-big {
+      display:inline-block;
+      background:linear-gradient(135deg,#00d4ff,#8b5cf6);
+      color:#fff; font-size:18px; font-weight:700;
+      padding:16px 60px; border-radius:50px;
+      cursor:pointer; border:none; letter-spacing:2px;
+      box-shadow:0 0 32px rgba(0,212,255,.45);
+      transition:all .3s; font-family:inherit;
+    }
+    .btn-big:hover { transform:translateY(-4px); box-shadow:0 0 56px rgba(0,212,255,.65); }
+
+    /* ===== 测试页 ===== */
+    #pg-quiz { display:none; }
+    .quiz-top { padding:40px 0 20px; text-align:center; }
+    .prog-wrap { background:var(--surface2); border-radius:8px; height:6px; margin-bottom:8px; overflow:hidden; }
+    .prog-bar {
+      height:100%; border-radius:8px;
+      background:linear-gradient(90deg,#00d4ff,#8b5cf6);
+      transition:width .5s ease;
+    }
+    .prog-txt { font-size:13px; color:var(--text-muted); margin-bottom:28px; }
+
+    .q-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:22px; padding:36px 32px; margin-bottom:20px;
+      animation:fadeUp .4s ease;
+    }
+    @keyframes fadeUp {
+      from{opacity:0;transform:translateY(18px);}
+      to{opacity:1;transform:translateY(0);}
+    }
+    .q-scene {
+      font-size:12px; letter-spacing:2px; color:var(--text-muted);
+      margin-bottom:14px; font-weight:500;
+    }
+    .q-text {
+      font-size:20px; font-weight:600; line-height:1.65; margin-bottom:28px; color:var(--text);
+    }
+    .opts { display:grid; gap:10px; }
+    .opt {
+      background:var(--surface2); border:1px solid var(--border);
+      border-radius:14px; padding:16px 18px;
+      color:var(--text); font-size:15px; line-height:1.55;
+      cursor:pointer; transition:all .22s; text-align:left;
+      font-family:inherit; display:flex; align-items:flex-start; gap:12px;
+    }
+    .opt:hover { border-color:var(--accent); background:rgba(0,212,255,.05); transform:translateX(5px); }
+    .opt.sel { border-color:var(--accent); background:rgba(0,212,255,.1); box-shadow:var(--glow); }
+    .opt-ab {
+      flex-shrink:0; width:28px; height:28px; border-radius:50%;
+      background:var(--border); display:flex; align-items:center;
+      justify-content:center; font-size:12px; font-weight:800; color:var(--accent);
+    }
+
+    .nav-row { display:flex; gap:12px; margin-top:4px; }
+    .btn-nav {
+      flex:1; padding:14px; border-radius:12px;
+      border:1px solid var(--border); background:var(--surface2);
+      color:var(--text); font-size:15px; cursor:pointer;
+      transition:all .22s; font-family:inherit; font-weight:500;
+    }
+    .btn-nav:hover { border-color:var(--accent); }
+    .btn-nav.pri {
+      background:linear-gradient(135deg,#00d4ff,#8b5cf6);
+      border:none; color:#fff; font-weight:700;
+    }
+    .btn-nav.pri:hover { box-shadow:var(--glow); transform:translateY(-2px); }
+    .btn-nav:disabled { opacity:.3; cursor:not-allowed; transform:none!important; }
+
+    /* ===== 结果页 ===== */
+    #pg-result { display:none; }
+    .res-hero { text-align:center; padding:52px 0 28px; }
+    .res-emoji { font-size:88px; display:block; animation:popIn .8s ease; }
+    @keyframes popIn {
+      from{transform:scale(0) rotate(-180deg);opacity:0;}
+      to{transform:scale(1) rotate(0);opacity:1;}
+    }
+    .res-code {
+      font-size:64px; font-weight:900; letter-spacing:8px;
+      background:linear-gradient(135deg,#00d4ff,#8b5cf6,#10b981,#f59e0b);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text; margin:10px 0 8px;
+      animation:fadeUp .6s ease .3s both;
+    }
+    .res-name {
+      font-size:24px; font-weight:700; color:var(--accent);
+      margin-bottom:4px; animation:fadeUp .6s ease .5s both;
+    }
+    .res-alias {
+      font-size:14px; color:var(--text-muted);
+      animation:fadeUp .6s ease .7s both;
+    }
+
+    .res-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:20px; padding:26px 28px; margin-bottom:18px;
+      animation:fadeUp .6s ease .9s both;
+    }
+    .res-card h3 {
+      font-size:12px; letter-spacing:2px; color:var(--text-muted);
+      margin-bottom:14px; text-transform:uppercase;
+    }
+
+    .quote-banner {
+      background:linear-gradient(135deg,rgba(0,212,255,.06),rgba(139,92,246,.06));
+      border:1px solid rgba(0,212,255,.2); border-radius:16px;
+      padding:22px 26px; text-align:center; margin-bottom:18px;
+      font-size:17px; line-height:1.75; color:var(--text);
+      animation:fadeUp .6s ease .7s both;
+    }
+    .quote-banner .qs { color:var(--accent); font-weight:700; font-style:normal; }
+
+    .setting-text {
+      font-size:16px; line-height:1.85; color:var(--text); margin-bottom:14px;
+    }
+    .alias-row {
+      display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;
+    }
+    .alias-tag {
+      background:rgba(139,92,246,.12); border:1px solid rgba(139,92,246,.25);
+      color:var(--accent2); border-radius:20px; padding:4px 12px; font-size:12px; font-weight:500;
+    }
+    .quote-box {
+      background:rgba(245,158,11,.07); border:1px solid rgba(245,158,11,.22);
+      border-radius:12px; padding:12px 18px; font-size:14px; color:var(--gold); line-height:1.7;
+    }
+    .quote-box em { font-style:normal; font-weight:700; }
+
+    /* 雷达/匹配度 */
+    .match-grid {
+      display:grid; gap:10px;
+    }
+    .match-row { display:flex; align-items:center; gap:12px; }
+    .match-label {
+      width:90px; flex-shrink:0; font-size:13px; color:var(--text-muted); text-align:right;
+    }
+    .match-track {
+      flex:1; background:var(--surface2); border-radius:6px; height:9px; overflow:hidden;
+    }
+    .match-fill {
+      height:100%; border-radius:6px; transition:width 1.2s ease .8s;
+    }
+    .match-pct { width:36px; flex-shrink:0; font-size:12px; color:var(--text-muted); text-align:right; }
+
+    /* 全部类型 */
+    .all-grid {
+      display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:14px;
+    }
+    .ac {
+      background:var(--surface2); border:1px solid var(--border);
+      border-radius:10px; padding:10px 8px; text-align:center;
+      cursor:pointer; transition:all .2s;
+    }
+    .ac:hover { border-color:var(--accent); background:rgba(0,212,255,.05); }
+    .ac.mine { border-color:var(--accent); background:rgba(0,212,255,.1); }
+    .ac-emoji { font-size:20px; }
+    .ac-code { font-size:13px; font-weight:700; color:var(--accent); letter-spacing:.5px; }
+    .ac-name { font-size:10px; color:var(--text-muted); margin-top:2px; }
+
+    .btn-retry {
+      display:block; width:100%; padding:15px;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:14px; color:var(--text); font-size:15px;
+      cursor:pointer; font-family:inherit; font-weight:500;
+      transition:all .3s; margin-top:14px;
+    }
+    .btn-retry:hover { border-color:var(--accent); box-shadow:var(--glow); }
+
+    /* 弹窗 */
+    .overlay {
+      position:fixed; inset:0; background:rgba(0,0,0,.85); z-index:200;
+      display:flex; align-items:center; justify-content:center; padding:20px;
+      opacity:0; pointer-events:none; transition:opacity .3s;
+    }
+    .overlay.on { opacity:1; pointer-events:all; }
+    .mbox {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:22px; padding:32px; max-width:500px; width:100%;
+      max-height:88vh; overflow-y:auto;
+      transform:scale(.88); transition:transform .3s;
+    }
+    .overlay.on .mbox { transform:scale(1); }
+    .mclose {
+      float:right; background:none; border:none; color:var(--text-muted);
+      font-size:22px; cursor:pointer; line-height:1;
+    }
+    .m-emoji { font-size:48px; display:block; margin:10px 0 8px; }
+    .m-code {
+      font-size:36px; font-weight:900; letter-spacing:4px;
+      background:linear-gradient(135deg,#00d4ff,#8b5cf6);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text; margin-bottom:4px;
+    }
+    .m-name { font-size:18px; font-weight:700; color:var(--accent); margin-bottom:12px; }
+    .m-alias { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+    .m-alias span {
+      background:rgba(139,92,246,.12); border:1px solid rgba(139,92,246,.25);
+      color:var(--accent2); border-radius:20px; padding:3px 10px; font-size:11px;
+    }
+    .m-setting { font-size:14px; line-height:1.85; margin-bottom:12px; }
+    .m-quote {
+      background:rgba(245,158,11,.07); border:1px solid rgba(245,158,11,.22);
+      border-radius:10px; padding:10px 14px; font-size:13px; color:var(--gold); line-height:1.7;
+    }
+    .m-quote em { font-style:normal; font-weight:700; }
+
+    @media(max-width:560px){
+      .hero-title{font-size:38px;}
+      .type-preview,.all-grid{grid-template-columns:repeat(4,1fr);}
+      .q-text{font-size:17px;}
+      .res-code{font-size:44px;}
+      .res-name{font-size:18px;}
+    }
+  </style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+
+<!-- ====== 首页 ====== -->
+<div id="pg-intro">
+  <div class="wrap">
+    <div class="intro-hero">
+      <span class="hero-emoji">🐟</span>
+      <h1 class="hero-title">DBTI</h1>
+      <p class="hero-en">我呆固我在，别人笑我太疯癫，我笑别人看不穿</p>
+    </div>
+
+    <div class="intro-desc">
+      <h3>🧬 关于这份测试</h3>
+      <p>
+        通过 <strong>12 道情景题</strong>，从你的<strong>花钱方式、鱼的存活率、处理方式、扩张欲望</strong>四个维度，
+        把你精准匹配到 16 种养鱼人格之一。<br><br>
+        无论你是 <strong>鱼市提款机 ATM</strong>，还是 <strong>忍辱负重的家属 HELP</strong>，
+        这里都有你的位置。
+      </p>
+    </div>
+
+    <div class="type-preview" id="intro-types"></div>
+
+    <div style="text-align:center;margin-bottom:12px;">
+      <p style="color:var(--text-muted);font-size:14px;margin-bottom:22px;">共 12 道题 · 约 3 分钟 · 结果100%精准（误差±16种）</p>
+      <button class="btn-big" onclick="startQuiz()">🎣 开始测试</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 测试页 ====== -->
+<div id="pg-quiz">
+  <div class="wrap">
+    <div class="quiz-top">
+      <div class="prog-wrap"><div class="prog-bar" id="prog" style="width:0%"></div></div>
+      <div class="prog-txt" id="prog-txt">第 1 题 / 共 12 题</div>
+    </div>
+    <div id="q-area"></div>
+    <div class="nav-row">
+      <button class="btn-nav" id="btn-prev" onclick="prevQ()" disabled>← 上一题</button>
+      <button class="btn-nav pri" id="btn-next" onclick="nextQ()">下一题 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 结果页 ====== -->
+<div id="pg-result">
+  <div class="wrap">
+    <div class="res-hero">
+      <span class="res-emoji" id="r-emoji">🐟</span>
+      <div class="res-code" id="r-code">ATM</div>
+      <div class="res-name" id="r-name">鱼市提款机</div>
+      <div class="res-alias" id="r-alias">冤种巨富 / 商家最爱</div>
+    </div>
+
+    <div class="quote-banner" id="r-quote"></div>
+
+    <div class="res-card">
+      <h3>📋 人格设定</h3>
+      <div class="alias-row" id="r-alias-tags"></div>
+      <div class="setting-text" id="r-setting"></div>
+      <div class="quote-box" id="r-qbox"></div>
+    </div>
+
+    <div class="res-card">
+      <h3>📊 与各人格匹配度</h3>
+      <div class="match-grid" id="r-match"></div>
+    </div>
+
+    <div class="res-card">
+      <h3>🌊 全部 16 型 · 点击查看</h3>
+      <div class="all-grid" id="r-all"></div>
+    </div>
+
+    <button class="btn-retry" onclick="retryQuiz()">🔄 重新测试 · 看看这次你是哪只</button>
+  </div>
+</div>
+
+<!-- 弹窗 -->
+<div class="overlay" id="modal" onclick="closeM(event)">
+  <div class="mbox">
+    <button class="mclose" onclick="closeM(null)">✕</button>
+    <span class="m-emoji" id="m-emoji"></span>
+    <div class="m-code" id="m-code"></div>
+    <div class="m-name" id="m-name"></div>
+    <div class="m-alias" id="m-alias"></div>
+    <div class="m-setting" id="m-setting"></div>
+    <div class="m-quote" id="m-quote"></div>
+  </div>
+</div>
+
+<script>
+// ===================== 粒子背景 =====================
+(()=>{
+  const c=document.getElementById('bg'),ctx=c.getContext('2d');
+  let W,H;
+  const resize=()=>{W=c.width=innerWidth;H=c.height=innerHeight;};
+  resize(); addEventListener('resize',resize);
+  const cols=['#00d4ff','#8b5cf6','#10b981','#f59e0b','#ef4444','#ec4899'];
+  const pts=Array.from({length:22},()=>({
+    x:Math.random(),vy:Math.random()*.25+.08,
+    r:Math.random()*5+2,col:cols[Math.random()*cols.length|0],
+    op:Math.random()*.25+.08,ph:Math.random()*Math.PI*2
+  }));
+  let t0=null;
+  const draw=ts=>{
+    if(!t0)t0=ts;
+    const t=(ts-t0)/1000;
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>{
+      const y=H-(((t*p.vy*50+p.ph*H/Math.PI/2)%H+H)%H);
+      const x=p.x*W+Math.sin(t*.4+p.ph)*28;
+      ctx.beginPath();ctx.arc(x,y,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.col+(Math.round(p.op*255).toString(16).padStart(2,'0'));
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  };
+  requestAnimationFrame(draw);
+})();
+
+// ===================== 16 型数据 =====================
+const TYPES = {
+  ATM:{
+    name:'鱼市提款机', emoji:'💳',
+    alias:['冤种巨富','商家最爱'],
+    setting:'鱼死得越快，买得越嗨。不懂技术，全靠钞能力给鱼市贡献 GDP。每次死鱼都是一次购物节，信用卡都是鱼市的联名款。',
+    quote:'我不知道它为什么死，我只知道换一条新的要多少钱。',
+    scores:{money:3,death:3,logic:0,expand:2}
+  },
+  DEAD:{
+    name:'灵位批发商', emoji:'⚰️',
+    alias:['死鱼大师','鱼见愁'],
+    setting:'养啥死啥，缸里常年漂着白毛，网兜是他身体的延伸。不是他不努力，是鱼的寿命跟他天生八字不合。',
+    quote:'这批鱼命薄，不怪我，下一批肯定能活过头七。',
+    scores:{money:1,death:3,logic:0,expand:2}
+  },
+  JUMP:{
+    name:'地毯搜索队', emoji:'🔍',
+    alias:['蹦迪终结者','干尸收集员'],
+    setting:'专门养雷龙、龙鱼这种想不开的。每天回家第一件事是趴在地毯上找鱼。找到了是惊喜，没找到是失踪案。',
+    quote:'诶？昨晚还在缸里，今天怎么在沙发缝里缩成小鱼干了？',
+    scores:{money:1,death:3,logic:0,expand:0}
+  },
+  OJBK:{
+    name:'佛系送走人', emoji:'🧘',
+    alias:['随缘大师','只要缸还在'],
+    setting:'水绿了？OJBK。鱼跑了？OJBK。停电了？OJBK。没有什么能打扰他的内心平静，包括鱼的死亡。',
+    quote:'鱼生如梦，走了便走了，换桶自来水又是一条好汉。',
+    scores:{money:0,death:2,logic:0,expand:0}
+  },
+  SHIT:{
+    name:'喂食过量的神', emoji:'🍚',
+    alias:['鱼界猪场场长','绿豆汤厨师'],
+    setting:'总觉得鱼饿，一勺一勺往里倒，缸里全是粑粑和剩饭，水质浓稠如粥。他管这叫"爱"，鱼管这叫溺亡。',
+    quote:'看它抢食多开心啊！什么？那是撑得翻肚皮了？',
+    scores:{money:1,death:3,logic:0,expand:1}
+  },
+  PURE:{
+    name:'裸缸原批', emoji:'🪟',
+    alias:['极简主义疯子','玻璃擦拭者'],
+    setting:'缸里除了水和鱼，连颗沙子都没有。一丝多余的东西都是污染，一块造景石都是对纯粹的侵犯。',
+    quote:'造景只会影响我观察鱼鳞的角度，那是亵渎。',
+    scores:{money:3,death:0,logic:3,expand:0}
+  },
+  DIYER:{
+    name:'叙利亚工程师', emoji:'🔧',
+    alias:['破烂王','漏电先锋'],
+    setting:'绝不买成品。外卖盒做过滤，洗衣机管抽水，家里随时像要爆炸。但水质出奇地好，鱼出奇地难死。',
+    quote:'花那钱干啥？我用这废旧塑料瓶改的滤桶不香吗？（滋——被电了一下）',
+    scores:{money:0,death:0,logic:3,expand:2}
+  },
+  RICH:{
+    name:'滤材皇帝', emoji:'👑',
+    alias:['尼特利亲儿子','装备党课代表'],
+    setting:'鱼不重要，器材必须顶配。滤材堆得比人高，家里电表转得像电风扇。没有什么问题是加一件设备解决不了的。',
+    quote:'虽然我还没买鱼，但我这套过滤系统已经能养海豚了。',
+    scores:{money:3,death:0,logic:3,expand:3}
+  },
+  ROCK:{
+    name:'原生老顽固', emoji:'🪨',
+    alias:['石头搬运工','野采特种兵'],
+    setting:'沉迷于捡石头和捞野鱼。看不起一切人工鱼，觉得红绿灯鱼都太俗，觉得人工繁殖是对大自然的背刺。',
+    quote:'这是我从海拔三千米的溪流里人肉背回来的石头，懂不懂它的含金量？',
+    scores:{money:0,death:0,logic:3,expand:1}
+  },
+  MOSS:{
+    name:'莫丝理发师', emoji:'✂️',
+    alias:['草缸文青','黑毛藻宿敌'],
+    setting:'每天拿着镊子在水里做手术。草长歪一毫米都能让他当场崩溃，发现一根黑毛藻相当于发现了家里有贼。',
+    quote:'鱼可以死，草必须绿。这根草上有根藻，我不干净了！',
+    scores:{money:2,death:1,logic:3,expand:1}
+  },
+  MORE:{
+    name:'承重墙杀手', emoji:'🏗️',
+    alias:['扩缸永动机','搬家公司噩梦'],
+    setting:'只要家里还有一块空地，就能再塞一个缸。已经不记得上次看见地板是什么时候了。',
+    quote:'真的，这是最后一个缸，再买我就剁手……诶？这个40方缸真好看。',
+    scores:{money:2,death:1,logic:1,expand:3}
+  },
+  SOS:{
+    name:'试剂盒吞噬者', emoji:'🧪',
+    alias:['滴定狂魔','水质监测仪'],
+    setting:'每天测PH、测氨氮、测硝酸盐。比起看鱼，他更爱看试管变色。没有指标他活不下去，鱼反而次要。',
+    quote:'指标还没调好，现在的鱼缸对我来说就是个毒气室。',
+    scores:{money:2,death:0,logic:3,expand:2}
+  },
+  SLAVE:{
+    name:'龙鱼老奴', emoji:'🙇',
+    alias:['祖宗供养人','卑微饲养员'],
+    setting:'每天换水、控温、切虾、按摩。鱼是主子，他是随从，鱼的表情决定他今天过得好不好。',
+    quote:'主子今天看了我一眼，看来水温很满意。',
+    scores:{money:3,death:0,logic:2,expand:0}
+  },
+  UFO:{
+    name:'睁眼瞎派掌门', emoji:'🌫️',
+    alias:['绿水先知','盲人养鱼'],
+    setting:'缸里绿到反光，啥也看不见。他管这叫"原生古法养生"，鱼死没死他无从得知，但他选择相信。',
+    quote:'只要我看不到它死，它就永远活着。这是薛定谔的鱼。',
+    scores:{money:0,death:2,logic:0,expand:1}
+  },
+  BYE:{
+    name:'抽水带师', emoji:'🪣',
+    alias:['抽水抽干将','厕所常客'],
+    setting:'没钱买过滤，全靠一身力。每天提桶换水，家里地板永远是湿的，邻居以为他在开洗车房。',
+    quote:'养鱼？养鱼不就是练深蹲和提重物吗？',
+    scores:{money:0,death:1,logic:2,expand:2}
+  },
+  HELP:{
+    name:'换水带师的家属', emoji:'😤',
+    alias:['忍辱负重者','随时想砸缸的人'],
+    setting:'自己不养鱼，但每天要帮着捞死鱼、擦地板、交电费。已经记不清上次睡个好觉是什么时候了。',
+    quote:'你和你的鱼，今天必须走一个。',
+    scores:{money:0,death:2,logic:1,expand:0}
+  },
+};
+
+// ===================== 题目 =====================
+// 每题4个选项，每个选项给各维度加分
+// 维度: money(氪金0-3) death(鱼死率0-3) logic(科学理性0-3) expand(扩张欲0-3)
+const QUESTIONS = [
+  {
+    scene:'💰 花钱这件事',
+    text:'鱼缸设备预算超支了，你下一步怎么做？',
+    opts:[
+      {t:'刷卡，进口滤材不能省，贵的才是好的', scores:{money:3,death:0,logic:1,expand:0}},
+      {t:'翻出家里的矿泉水瓶，自己动手改一个', scores:{money:0,death:0,logic:2,expand:0}},
+      {t:'鱼都死得差不多了，买新鱼比买设备便宜', scores:{money:2,death:3,logic:0,expand:0}},
+      {t:'不管了，缸还在就行，设备能用就用', scores:{money:0,death:1,logic:0,expand:0}},
+    ]
+  },
+  {
+    scene:'💀 鱼的生死',
+    text:'今天早上发现缸里漂着一条鱼，你第一反应是？',
+    opts:[
+      {t:'马上打开购鱼APP，看看今天有没有活动', scores:{money:2,death:3,logic:0,expand:1}},
+      {t:'拿出检测仪，先测水质，找到死因再说', scores:{money:1,death:0,logic:3,expand:0}},
+      {t:'捞出来扔掉，叹口气：命薄，不怪我', scores:{money:0,death:3,logic:0,expand:0}},
+      {t:'默默念了一句"阿弥陀佛"，继续摸鱼', scores:{money:0,death:2,logic:0,expand:0}},
+    ]
+  },
+  {
+    scene:'🔬 水质管理',
+    text:'朋友说"绿水养鱼，祖传秘方"，你怎么看？',
+    opts:[
+      {t:'听起来很可疑，拿试剂盒测一下再说', scores:{money:0,death:0,logic:3,expand:0}},
+      {t:'我缸里已经绿得反光了，鱼好像还活着？', scores:{money:0,death:2,logic:0,expand:0}},
+      {t:'祖传的都是精华，马上停用过滤', scores:{money:0,death:2,logic:0,expand:0}},
+      {t:'随便，鱼活着就行，管它绿不绿', scores:{money:0,death:1,logic:0,expand:0}},
+    ]
+  },
+  {
+    scene:'📦 扩缸冲动',
+    text:'家里已经有5个缸了，你在鱼市看到了一个绝美的新款大缸，你会？',
+    opts:[
+      {t:'买！阳台还有地方，再挤挤', scores:{money:2,death:0,logic:0,expand:3}},
+      {t:'拍张照发朋友圈，过过眼瘾就够', scores:{money:0,death:0,logic:0,expand:0}},
+      {t:'买了缸就得买鱼，但买鱼我就得再换水……算了', scores:{money:0,death:0,logic:1,expand:0}},
+      {t:'这个预算够我再买30条鱼，买缸干嘛', scores:{money:2,death:2,logic:0,expand:0}},
+    ]
+  },
+  {
+    scene:'🍽️ 喂食哲学',
+    text:'该喂鱼了，你喂了多少？',
+    opts:[
+      {t:'精确称量0.2克，不多不少，按体重计算', scores:{money:0,death:0,logic:3,expand:0}},
+      {t:'一大勺，看它们抢食好解压', scores:{money:0,death:2,logic:0,expand:0}},
+      {t:'喂了三次，总觉得没吃饱', scores:{money:0,death:3,logic:0,expand:0}},
+      {t:'忘了……上次喂是两天前？', scores:{money:0,death:2,logic:0,expand:0}},
+    ]
+  },
+  {
+    scene:'🎨 造景审美',
+    text:'布置鱼缸时，你更倾向于？',
+    opts:[
+      {t:'裸缸！一根草都是污染，影响我观察鱼鳞', scores:{money:2,death:0,logic:3,expand:0}},
+      {t:'草缸，每株草的位置都要精确到毫米', scores:{money:2,death:0,logic:3,expand:1}},
+      {t:'捡几块石头从河里捞几条野鱼，自然就是美', scores:{money:0,death:0,logic:2,expand:0}},
+      {t:'随便扔点东西进去，鱼自己选吧', scores:{money:0,death:1,logic:0,expand:0}},
+    ]
+  },
+  {
+    scene:'🔧 DIY能力',
+    text:'过滤系统需要升级，你怎么操作？',
+    opts:[
+      {t:'德国进口滤桶，配日本进口滤材，一步到位', scores:{money:3,death:0,logic:2,expand:0}},
+      {t:'外卖盒+废管道，30分钟自制一个，顺便被电一下', scores:{money:0,death:0,logic:2,expand:0}},
+      {t:'多换几次水比装过滤便宜，练练腿力', scores:{money:0,death:1,logic:1,expand:0}},
+      {t:'不装了，绿水不也挺好的吗', scores:{money:0,death:2,logic:0,expand:0}},
+    ]
+  },
+  {
+    scene:'🐟 选鱼偏好',
+    text:'你最想养哪种鱼？',
+    opts:[
+      {t:'超级红龙，贵的就是好的，放财位镇宅', scores:{money:3,death:1,logic:0,expand:0}},
+      {t:'雷龙或其他会跳缸的大型猛鱼', scores:{money:1,death:2,logic:0,expand:1}},
+      {t:'从河里捞的野生鳑鲏，绝不买人工鱼', scores:{money:0,death:0,logic:2,expand:0}},
+      {t:'五毛钱一条的小金鱼，死了再买', scores:{money:0,death:3,logic:0,expand:0}},
+    ]
+  },
+  {
+    scene:'📊 数据控',
+    text:'你多久检测一次水质？',
+    opts:[
+      {t:'每天至少两次，还有自动记录表格', scores:{money:1,death:0,logic:3,expand:0}},
+      {t:'从来不测，用眼睛看，感觉清就是清', scores:{money:0,death:2,logic:0,expand:0}},
+      {t:'测什么测，鱼死了再说', scores:{money:1,death:3,logic:0,expand:0}},
+      {t:'偶尔测一下，但懒得记录', scores:{money:0,death:1,logic:1,expand:0}},
+    ]
+  },
+  {
+    scene:'🏠 生活状态',
+    text:'你家里的鱼缸区域是什么样的？',
+    opts:[
+      {t:'家里走廊全是水管，地板长年是湿的', scores:{money:0,death:1,logic:1,expand:3}},
+      {t:'整洁干净，每条线都走管道，看不见一根电线', scores:{money:3,death:0,logic:3,expand:1}},
+      {t:'乱，但有我自己的逻辑，外卖盒和废管道都有用', scores:{money:0,death:0,logic:2,expand:2}},
+      {t:'一个角落，一个缸，就够了', scores:{money:1,death:0,logic:1,expand:0}},
+    ]
+  },
+  {
+    scene:'😤 家庭关系',
+    text:'家人对你养鱼的态度是？',
+    opts:[
+      {t:'已经学会自动帮我捞死鱼了，默默配合', scores:{money:0,death:2,logic:0,expand:0}},
+      {t:'每次我添新缸都会爆发一次世界大战', scores:{money:1,death:0,logic:0,expand:3}},
+      {t:'我买鱼的钱比家用还多，他们已经放弃说我了', scores:{money:3,death:1,logic:0,expand:0}},
+      {t:'他们不管，我也不管他们，相安无事', scores:{money:0,death:1,logic:0,expand:0}},
+    ]
+  },
+  {
+    scene:'🌊 终极哲学',
+    text:'对你来说，养鱼的意义是什么？',
+    opts:[
+      {t:'花钱买快乐，鱼活多久不重要，买鱼的瞬间最爽', scores:{money:3,death:2,logic:0,expand:1}},
+      {t:'征服和掌控，数据和设备都要在我的掌握之中', scores:{money:2,death:0,logic:3,expand:2}},
+      {t:'看着它们游来游去，啥都不想，最解压', scores:{money:0,death:0,logic:0,expand:0}},
+      {t:'不知道，反正已经停不下来了', scores:{money:1,death:1,logic:0,expand:2}},
+    ]
+  },
+];
+
+// ===================== 状态 =====================
+let cur=0, answers={};
+// 每个类型的累计得分
+let typeScores={};
+
+function resetState(){
+  cur=0; answers={};
+  typeScores={};
+  Object.keys(TYPES).forEach(k=>typeScores[k]=0);
+}
+
+function calcTypeScores(){
+  // 根据答案计算每种类型的匹配分
+  // 方法：用每道题选项的scores与每种类型的scores做相似度
+  Object.keys(TYPES).forEach(k=>{
+    let total=0;
+    Object.values(answers).forEach(optIdx_q=>{
+      // optIdx_q = {q: question index, opt: option index}
+    });
+    typeScores[k]=0;
+  });
+
+  // 重新实现：用余弦相似度
+  // 用户画像向量
+  const userVec={money:0,death:0,logic:0,expand:0};
+  Object.entries(answers).forEach(([qi,oi])=>{
+    const opt=QUESTIONS[qi].opts[oi];
+    Object.entries(opt.scores).forEach(([dim,val])=>{
+      userVec[dim]+=val;
+    });
+  });
+
+  // 与每种类型做点积
+  const dims=['money','death','logic','expand'];
+  Object.entries(TYPES).forEach(([k,t])=>{
+    let dot=0,normT=0,normU=0;
+    dims.forEach(d=>{
+      dot+=userVec[d]*t.scores[d];
+      normT+=t.scores[d]**2;
+      normU+=userVec[d]**2;
+    });
+    const sim = normT===0||normU===0 ? 0 : dot/Math.sqrt(normT)/Math.sqrt(normU);
+    typeScores[k]=sim;
+  });
+}
+
+function getTopType(){
+  return Object.entries(typeScores).sort((a,b)=>b[1]-a[1])[0][0];
+}
+
+// ===================== 首页预览 =====================
+function renderIntroTypes(){
+  const el=document.getElementById('intro-types');
+  Object.entries(TYPES).forEach(([code,t])=>{
+    const d=document.createElement('div');
+    d.className='tp-chip';
+    d.innerHTML=`<div class="tp-chip-emoji">${t.emoji}</div>
+      <div class="tp-chip-code">${code}</div>
+      <div class="tp-chip-name">${t.name}</div>`;
+    d.onclick=()=>openModal(code);
+    el.appendChild(d);
+  });
+}
+renderIntroTypes();
+
+// ===================== 测试逻辑 =====================
+function startQuiz(){
+  resetState();
+  document.getElementById('pg-intro').style.display='none';
+  document.getElementById('pg-quiz').style.display='block';
+  renderQ();
+}
+
+function renderQ(){
+  const q=QUESTIONS[cur];
+  const pct=(cur/QUESTIONS.length*100).toFixed(0);
+  document.getElementById('prog').style.width=pct+'%';
+  document.getElementById('prog-txt').textContent=`第 ${cur+1} 题 / 共 ${QUESTIONS.length} 题`;
+
+  let html=`<div class="q-card">
+    <div class="q-scene">${q.scene}</div>
+    <div class="q-text">${q.text}</div>
+    <div class="opts">`;
+  const labs=['A','B','C','D'];
+  q.opts.forEach((o,i)=>{
+    const sel=answers[cur]===i?'sel':'';
+    html+=`<button class="opt ${sel}" onclick="pickOpt(${i})">
+      <div class="opt-ab">${labs[i]}</div>
+      <div>${o.t}</div>
+    </button>`;
+  });
+  html+=`</div></div>`;
+  document.getElementById('q-area').innerHTML=html;
+
+  document.getElementById('btn-prev').disabled=cur===0;
+  const btnN=document.getElementById('btn-next');
+  if(cur===QUESTIONS.length-1){
+    btnN.textContent='🎯 查看结果';
+    btnN.onclick=showResult;
+  } else {
+    btnN.textContent='下一题 →';
+    btnN.onclick=nextQ;
+  }
+  btnN.disabled=answers[cur]===undefined;
+}
+
+function pickOpt(i){
+  answers[cur]=i;
+  document.getElementById('btn-next').disabled=false;
+  renderQ();
+  setTimeout(()=>{
+    if(cur<QUESTIONS.length-1) nextQ();
+    else showResult();
+  },380);
+}
+
+function nextQ(){
+  if(answers[cur]===undefined)return;
+  if(cur<QUESTIONS.length-1){cur++;renderQ();}
+}
+function prevQ(){
+  if(cur>0){cur--;renderQ();}
+}
+
+// ===================== 结果 =====================
+function showResult(){
+  calcTypeScores();
+  const code=getTopType();
+  const d=TYPES[code];
+
+  document.getElementById('pg-quiz').style.display='none';
+  document.getElementById('pg-result').style.display='block';
+  window.scrollTo(0,0);
+
+  document.getElementById('r-emoji').textContent=d.emoji;
+  document.getElementById('r-code').textContent=code;
+  document.getElementById('r-name').textContent=d.name;
+  document.getElementById('r-alias').textContent=d.alias.join(' / ');
+  document.getElementById('r-quote').innerHTML=`<em class="qs">「</em> ${d.quote} <em class="qs">」</em>`;
+
+  // 别名标签
+  const aTags=document.getElementById('r-alias-tags');
+  aTags.innerHTML='';
+  d.alias.forEach(a=>{
+    const s=document.createElement('span');
+    s.className='alias-tag'; s.textContent=a;
+    aTags.appendChild(s);
+  });
+
+  document.getElementById('r-setting').textContent=d.setting;
+  document.getElementById('r-qbox').innerHTML=`🗣 核心语录：<em>"${d.quote}"</em>`;
+
+  // 匹配度排名（前8名）
+  const sorted=Object.entries(typeScores)
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,8);
+  const maxScore=sorted[0][1]||1;
+  const barColors=['#00d4ff','#8b5cf6','#10b981','#f59e0b','#ef4444','#ec4899','#64748b','#94a3b8'];
+  let mHtml='';
+  sorted.forEach(([k,v],i)=>{
+    const pct=Math.round(v/maxScore*100);
+    mHtml+=`<div class="match-row">
+      <div class="match-label">${TYPES[k].emoji} ${k}</div>
+      <div class="match-track"><div class="match-fill" style="width:0%;background:${barColors[i]}" data-pct="${pct}%"></div></div>
+      <div class="match-pct">${pct}%</div>
+    </div>`;
+  });
+  document.getElementById('r-match').innerHTML=mHtml;
+  setTimeout(()=>{
+    document.querySelectorAll('.match-fill').forEach(el=>{
+      el.style.width=el.dataset.pct;
+    });
+  },120);
+
+  // 全部类型
+  const allEl=document.getElementById('r-all');
+  allEl.innerHTML='';
+  Object.entries(TYPES).forEach(([k,t])=>{
+    const c=document.createElement('div');
+    c.className='ac'+(k===code?' mine':'');
+    c.innerHTML=`<div class="ac-emoji">${t.emoji}</div>
+      <div class="ac-code">${k}</div>
+      <div class="ac-name">${t.name}</div>`;
+    c.onclick=()=>openModal(k);
+    allEl.appendChild(c);
+  });
+}
+
+function retryQuiz(){
+  document.getElementById('pg-result').style.display='none';
+  startQuiz();
+}
+
+// ===================== 弹窗 =====================
+function openModal(code){
+  const d=TYPES[code];
+  document.getElementById('m-emoji').textContent=d.emoji;
+  document.getElementById('m-code').textContent=code;
+  document.getElementById('m-name').textContent=d.name;
+  const ma=document.getElementById('m-alias');
+  ma.innerHTML='';
+  d.alias.forEach(a=>{const s=document.createElement('span');s.textContent=a;ma.appendChild(s);});
+  document.getElementById('m-setting').textContent=d.setting;
+  document.getElementById('m-quote').innerHTML=`🗣 <em>"${d.quote}"</em>`;
+  document.getElementById('modal').classList.add('on');
+}
+function closeM(e){
+  if(e&&e.target!==document.getElementById('modal'))return;
+  document.getElementById('modal').classList.remove('on');
+}
+</script>
+</body>
+</html>
