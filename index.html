@@ -1,890 +1,970 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DBTI · 养鱼人16型精神图谱</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>研伴respal · 达人投放工作台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --primary: #4F6FED; --primary-light: #E8EEFE; --primary-dark: #3A56C7;
+  --teal: #00C9A7; --teal-light: #E0FAF5;
+  --bg: #F5F6FA; --card: #FFFFFF;
+  --text: #1A1A2E; --text-secondary: #6B7280; --text-tertiary: #9CA3AF;
+  --border: #E8E8EF;
+  --success: #00B894; --success-light: #E0F7F2;
+  --warning: #F59E0B; --warning-light: #FEF3C7;
+  --danger: #EF4444; --danger-light: #FEE2E2;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-lg: 0 10px 30px rgba(0,0,0,0.08), 0 3px 10px rgba(0,0,0,0.04);
+  --radius: 12px; --radius-sm: 8px; --sidebar-w: 240px;
+}
+html { font-size: 14px; }
+body { font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+input, select, textarea { font-family: inherit; font-size: inherit; }
 
-    :root {
-      --bg: #080c18;
-      --surface: #0f1629;
-      --surface2: #161f35;
-      --border: #1e3058;
-      --accent: #00d4ff;
-      --accent2: #8b5cf6;
-      --accent3: #10b981;
-      --gold: #f59e0b;
-      --danger: #ef4444;
-      --pink: #ec4899;
-      --text: #e2e8f0;
-      --text-muted: #64748b;
-      --glow: 0 0 24px rgba(0,212,255,0.35);
-    }
+.app { display: flex; min-height: 100vh; }
+.sidebar { width: var(--sidebar-w); background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; bottom: 0; left: 0; z-index: 100; }
+.main { flex: 1; margin-left: var(--sidebar-w); display: flex; flex-direction: column; min-height: 100vh; }
+.content { flex: 1; padding: 24px 32px; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+.sidebar-header { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
+.sidebar-logo { display: flex; align-items: center; gap: 10px; }
+.sidebar-logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--teal)); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 16px; }
+.sidebar-logo-text { font-weight: 700; font-size: 15px; }
+.sidebar-logo-text small { display: block; font-size: 11px; color: var(--text-tertiary); font-weight: 400; }
+.sidebar-nav { flex: 1; padding: 12px 10px; overflow-y: auto; }
+.nav-section-label { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 1px; padding: 12px 12px 6px; font-weight: 500; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-sm); color: var(--text-secondary); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.15s; margin-bottom: 2px; }
+.nav-item:hover { background: var(--bg); color: var(--text); }
+.nav-item.active { background: var(--primary-light); color: var(--primary); }
+.nav-item svg { width: 20px; height: 20px; flex-shrink: 0; }
+.nav-badge { margin-left: auto; background: var(--danger); color: white; font-size: 11px; padding: 1px 7px; border-radius: 10px; font-weight: 600; }
+.sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-tertiary); }
 
-    body {
-      font-family: 'Noto Sans SC', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+.topbar { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 32px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+.topbar-title { font-size: 18px; font-weight: 700; }
+.topbar-search { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 14px; width: 320px; }
+.topbar-search input { border: none; background: none; outline: none; flex: 1; }
+.topbar-search svg { width: 18px; height: 18px; color: var(--text-tertiary); }
+.topbar-actions { display: flex; align-items: center; gap: 12px; }
 
-    /* ===== 粒子背景 ===== */
-    canvas#bg {
-      position: fixed; top:0; left:0;
-      width:100%; height:100%;
-      pointer-events:none; z-index:0;
-    }
+.card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); }
+.card-header { padding: 18px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.card-title { font-size: 16px; font-weight: 700; }
+.card-body { padding: 20px; }
 
-    .wrap {
-      position: relative; z-index:1;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 0 20px 100px;
-    }
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); padding: 20px; transition: transform 0.15s; }
+.stat-card:hover { transform: translateY(-2px); }
+.stat-card-label { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+.stat-card-value { font-size: 28px; font-weight: 700; color: var(--text); }
+.stat-card-sub { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
+.stat-card-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; float: right; }
+.stat-card-icon svg { width: 20px; height: 20px; }
 
-    /* ===== 首页 ===== */
-    #pg-intro { display:block; }
-    .intro-hero {
-      text-align:center;
-      padding: 56px 0 40px;
-    }
-    .hero-emoji {
-      font-size:80px;
-      display:block;
-      animation: bob 3s ease-in-out infinite;
-    }
-    @keyframes bob {
-      0%,100%{transform:translateY(0) rotate(-6deg);}
-      50%{transform:translateY(-14px) rotate(6deg);}
-    }
-    .hero-title {
-      font-size:52px; font-weight:900; letter-spacing:6px;
-      background: linear-gradient(135deg,#00d4ff,#8b5cf6,#10b981,#f59e0b);
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-      background-clip:text; margin:12px 0 6px;
-    }
-    .hero-sub {
-      font-size:17px; color:var(--text-muted); letter-spacing:2px; margin-bottom:4px;
-    }
-    .hero-en {
-      font-size:12px; color:var(--accent); letter-spacing:3px; opacity:.6; margin-bottom:44px;
-    }
-    .intro-desc {
-      background:var(--surface); border:1px solid var(--border);
-      border-radius:20px; padding:28px 32px;
-      margin-bottom:32px; text-align:left;
-    }
-    .intro-desc h3 { color:var(--accent); font-size:15px; margin-bottom:16px; letter-spacing:1px; }
-    .intro-desc p { font-size:14px; color:var(--text-muted); line-height:1.9; }
-    .intro-desc strong { color:var(--text); }
+.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.chart-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); }
+.chart-card-header { padding: 16px 20px; border-bottom: 1px solid var(--border); font-weight: 700; font-size: 15px; }
+.chart-card-body { padding: 16px; height: 260px; position: relative; }
 
-    .type-preview {
-      display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:32px;
-    }
-    .tp-chip {
-      background:var(--surface); border:1px solid var(--border);
-      border-radius:12px; padding:10px 8px; text-align:center;
-      cursor:pointer; transition:all .2s;
-    }
-    .tp-chip:hover { border-color:var(--accent); background:rgba(0,212,255,.05); transform:translateY(-2px); }
-    .tp-chip-emoji { font-size:22px; margin-bottom:4px; }
-    .tp-chip-code { font-size:13px; font-weight:700; color:var(--accent); letter-spacing:1px; }
-    .tp-chip-name { font-size:11px; color:var(--text-muted); margin-top:2px; }
+.banner { background: linear-gradient(135deg, #FFF8E1, #FFF3CD); border: 1px solid #F5D547; border-radius: var(--radius); padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 10px; }
+.banner-icon { flex-shrink: 0; font-size: 18px; }
+.banner-text { font-size: 13px; color: #92700B; line-height: 1.5; }
 
-    .btn-big {
-      display:inline-block;
-      background:linear-gradient(135deg,#00d4ff,#8b5cf6);
-      color:#fff; font-size:18px; font-weight:700;
-      padding:16px 60px; border-radius:50px;
-      cursor:pointer; border:none; letter-spacing:2px;
-      box-shadow:0 0 32px rgba(0,212,255,.45);
-      transition:all .3s; font-family:inherit;
-    }
-    .btn-big:hover { transform:translateY(-4px); box-shadow:0 0 56px rgba(0,212,255,.65); }
+.table-wrap { overflow-x: auto; }
+table.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.data-table th { background: var(--bg); padding: 10px 12px; text-align: left; font-weight: 600; color: var(--text-secondary); white-space: nowrap; border-bottom: 1px solid var(--border); position: sticky; top: 0; }
+table.data-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; max-width: 200px; overflow: hidden; text-overflow: ellipsis; }
+table.data-table tr:hover { background: var(--bg); }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: 500; }
+.badge-success { background: var(--success-light); color: var(--success); }
+.badge-warning { background: var(--warning-light); color: #B45309; }
+.badge-danger { background: var(--danger-light); color: var(--danger); }
+.badge-primary { background: var(--primary-light); color: var(--primary); }
+.badge-gray { background: #F0F0F2; color: var(--text-tertiary); }
 
-    /* ===== 测试页 ===== */
-    #pg-quiz { display:none; }
-    .quiz-top { padding:40px 0 20px; text-align:center; }
-    .prog-wrap { background:var(--surface2); border-radius:8px; height:6px; margin-bottom:8px; overflow:hidden; }
-    .prog-bar {
-      height:100%; border-radius:8px;
-      background:linear-gradient(90deg,#00d4ff,#8b5cf6);
-      transition:width .5s ease;
-    }
-    .prog-txt { font-size:13px; color:var(--text-muted); margin-bottom:28px; }
+.filter-bar { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+.filter-bar select, .filter-bar input { padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--card); outline: none; }
+.filter-bar select:focus, .filter-bar input:focus { border-color: var(--primary); }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 500; font-size: 13px; transition: all 0.15s; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-outline { border: 1px solid var(--border); color: var(--text-secondary); background: var(--card); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-success { background: var(--success); color: white; }
+.btn-danger { background: var(--danger); color: white; }
 
-    .q-card {
-      background:var(--surface); border:1px solid var(--border);
-      border-radius:22px; padding:36px 32px; margin-bottom:20px;
-      animation:fadeUp .4s ease;
-    }
-    @keyframes fadeUp {
-      from{opacity:0;transform:translateY(18px);}
-      to{opacity:1;transform:translateY(0);}
-    }
-    .q-scene {
-      font-size:12px; letter-spacing:2px; color:var(--text-muted);
-      margin-bottom:14px; font-weight:500;
-    }
-    .q-text {
-      font-size:20px; font-weight:600; line-height:1.65; margin-bottom:28px; color:var(--text);
-    }
-    .opts { display:grid; gap:10px; }
-    .opt {
-      background:var(--surface2); border:1px solid var(--border);
-      border-radius:14px; padding:16px 18px;
-      color:var(--text); font-size:15px; line-height:1.55;
-      cursor:pointer; transition:all .22s; text-align:left;
-      font-family:inherit; display:flex; align-items:flex-start; gap:12px;
-    }
-    .opt:hover { border-color:var(--accent); background:rgba(0,212,255,.05); transform:translateX(5px); }
-    .opt.sel { border-color:var(--accent); background:rgba(0,212,255,.1); box-shadow:var(--glow); }
-    .opt-ab {
-      flex-shrink:0; width:28px; height:28px; border-radius:50%;
-      background:var(--border); display:flex; align-items:center;
-      justify-content:center; font-size:12px; font-weight:800; color:var(--accent);
-    }
+.pagination { display: flex; gap: 4px; justify-content: center; margin-top: 16px; align-items: center; }
+.pagination button { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); background: var(--card); font-size: 13px; }
+.pagination button.active { background: var(--primary); color: white; border-color: var(--primary); }
+.pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    .nav-row { display:flex; gap:12px; margin-top:4px; }
-    .btn-nav {
-      flex:1; padding:14px; border-radius:12px;
-      border:1px solid var(--border); background:var(--surface2);
-      color:var(--text); font-size:15px; cursor:pointer;
-      transition:all .22s; font-family:inherit; font-weight:500;
-    }
-    .btn-nav:hover { border-color:var(--accent); }
-    .btn-nav.pri {
-      background:linear-gradient(135deg,#00d4ff,#8b5cf6);
-      border:none; color:#fff; font-weight:700;
-    }
-    .btn-nav.pri:hover { box-shadow:var(--glow); transform:translateY(-2px); }
-    .btn-nav:disabled { opacity:.3; cursor:not-allowed; transform:none!important; }
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 200; display: none; align-items: center; justify-content: center; }
+.modal-overlay.show { display: flex; }
+.modal { background: var(--card); border-radius: var(--radius); width: 90%; max-width: 720px; max-height: 85vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
+.modal-header { padding: 18px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--card); z-index: 10; }
+.modal-title { font-size: 17px; font-weight: 700; }
+.modal-close { font-size: 22px; color: var(--text-tertiary); cursor: pointer; }
+.modal-body { padding: 24px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary); }
+.form-group textarea { resize: vertical; min-height: 60px; }
 
-    /* ===== 结果页 ===== */
-    #pg-result { display:none; }
-    .res-hero { text-align:center; padding:52px 0 28px; }
-    .res-emoji { font-size:88px; display:block; animation:popIn .8s ease; }
-    @keyframes popIn {
-      from{transform:scale(0) rotate(-180deg);opacity:0;}
-      to{transform:scale(1) rotate(0);opacity:1;}
-    }
-    .res-code {
-      font-size:64px; font-weight:900; letter-spacing:8px;
-      background:linear-gradient(135deg,#00d4ff,#8b5cf6,#10b981,#f59e0b);
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-      background-clip:text; margin:10px 0 8px;
-      animation:fadeUp .6s ease .3s both;
-    }
-    .res-name {
-      font-size:24px; font-weight:700; color:var(--accent);
-      margin-bottom:4px; animation:fadeUp .6s ease .5s both;
-    }
-    .res-alias {
-      font-size:14px; color:var(--text-muted);
-      animation:fadeUp .6s ease .7s both;
-    }
+.toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--text); color: white; padding: 10px 24px; border-radius: 20px; font-size: 14px; z-index: 999; opacity: 0; transition: all 0.3s; }
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-    .res-card {
-      background:var(--surface); border:1px solid var(--border);
-      border-radius:20px; padding:26px 28px; margin-bottom:18px;
-      animation:fadeUp .6s ease .9s both;
-    }
-    .res-card h3 {
-      font-size:12px; letter-spacing:2px; color:var(--text-muted);
-      margin-bottom:14px; text-transform:uppercase;
-    }
+.analysis-input { width: 100%; padding: 12px 16px; border: 2px dashed var(--border); border-radius: var(--radius); font-size: 14px; outline: none; background: var(--bg); }
+.analysis-input:focus { border-color: var(--primary); background: var(--card); }
+.report-section { margin-bottom: 24px; }
+.report-section-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--primary-light); display: flex; align-items: center; gap: 8px; }
+.report-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.report-item { background: var(--bg); border-radius: var(--radius-sm); padding: 12px 14px; }
+.report-item-label { font-size: 12px; color: var(--text-tertiary); margin-bottom: 4px; }
+.report-item-value { font-size: 15px; font-weight: 600; }
 
-    .quote-banner {
-      background:linear-gradient(135deg,rgba(0,212,255,.06),rgba(139,92,246,.06));
-      border:1px solid rgba(0,212,255,.2); border-radius:16px;
-      padding:22px 26px; text-align:center; margin-bottom:18px;
-      font-size:17px; line-height:1.75; color:var(--text);
-      animation:fadeUp .6s ease .7s both;
-    }
-    .quote-banner .qs { color:var(--accent); font-weight:700; font-style:normal; }
+.empty-state { text-align: center; padding: 60px 20px; color: var(--text-tertiary); }
+.empty-state svg { width: 48px; height: 48px; margin-bottom: 16px; }
 
-    .setting-text {
-      font-size:16px; line-height:1.85; color:var(--text); margin-bottom:14px;
-    }
-    .alias-row {
-      display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;
-    }
-    .alias-tag {
-      background:rgba(139,92,246,.12); border:1px solid rgba(139,92,246,.25);
-      color:var(--accent2); border-radius:20px; padding:4px 12px; font-size:12px; font-weight:500;
-    }
-    .quote-box {
-      background:rgba(245,158,11,.07); border:1px solid rgba(245,158,11,.22);
-      border-radius:12px; padding:12px 18px; font-size:14px; color:var(--gold); line-height:1.7;
-    }
-    .quote-box em { font-style:normal; font-weight:700; }
-
-    /* 雷达/匹配度 */
-    .match-grid {
-      display:grid; gap:10px;
-    }
-    .match-row { display:flex; align-items:center; gap:12px; }
-    .match-label {
-      width:90px; flex-shrink:0; font-size:13px; color:var(--text-muted); text-align:right;
-    }
-    .match-track {
-      flex:1; background:var(--surface2); border-radius:6px; height:9px; overflow:hidden;
-    }
-    .match-fill {
-      height:100%; border-radius:6px; transition:width 1.2s ease .8s;
-    }
-    .match-pct { width:36px; flex-shrink:0; font-size:12px; color:var(--text-muted); text-align:right; }
-
-    /* 全部类型 */
-    .all-grid {
-      display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:14px;
-    }
-    .ac {
-      background:var(--surface2); border:1px solid var(--border);
-      border-radius:10px; padding:10px 8px; text-align:center;
-      cursor:pointer; transition:all .2s;
-    }
-    .ac:hover { border-color:var(--accent); background:rgba(0,212,255,.05); }
-    .ac.mine { border-color:var(--accent); background:rgba(0,212,255,.1); }
-    .ac-emoji { font-size:20px; }
-    .ac-code { font-size:13px; font-weight:700; color:var(--accent); letter-spacing:.5px; }
-    .ac-name { font-size:10px; color:var(--text-muted); margin-top:2px; }
-
-    .btn-retry {
-      display:block; width:100%; padding:15px;
-      background:var(--surface); border:1px solid var(--border);
-      border-radius:14px; color:var(--text); font-size:15px;
-      cursor:pointer; font-family:inherit; font-weight:500;
-      transition:all .3s; margin-top:14px;
-    }
-    .btn-retry:hover { border-color:var(--accent); box-shadow:var(--glow); }
-
-    /* 弹窗 */
-    .overlay {
-      position:fixed; inset:0; background:rgba(0,0,0,.85); z-index:200;
-      display:flex; align-items:center; justify-content:center; padding:20px;
-      opacity:0; pointer-events:none; transition:opacity .3s;
-    }
-    .overlay.on { opacity:1; pointer-events:all; }
-    .mbox {
-      background:var(--surface); border:1px solid var(--border);
-      border-radius:22px; padding:32px; max-width:500px; width:100%;
-      max-height:88vh; overflow-y:auto;
-      transform:scale(.88); transition:transform .3s;
-    }
-    .overlay.on .mbox { transform:scale(1); }
-    .mclose {
-      float:right; background:none; border:none; color:var(--text-muted);
-      font-size:22px; cursor:pointer; line-height:1;
-    }
-    .m-emoji { font-size:48px; display:block; margin:10px 0 8px; }
-    .m-code {
-      font-size:36px; font-weight:900; letter-spacing:4px;
-      background:linear-gradient(135deg,#00d4ff,#8b5cf6);
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-      background-clip:text; margin-bottom:4px;
-    }
-    .m-name { font-size:18px; font-weight:700; color:var(--accent); margin-bottom:12px; }
-    .m-alias { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
-    .m-alias span {
-      background:rgba(139,92,246,.12); border:1px solid rgba(139,92,246,.25);
-      color:var(--accent2); border-radius:20px; padding:3px 10px; font-size:11px;
-    }
-    .m-setting { font-size:14px; line-height:1.85; margin-bottom:12px; }
-    .m-quote {
-      background:rgba(245,158,11,.07); border:1px solid rgba(245,158,11,.22);
-      border-radius:10px; padding:10px 14px; font-size:13px; color:var(--gold); line-height:1.7;
-    }
-    .m-quote em { font-style:normal; font-weight:700; }
-
-    @media(max-width:560px){
-      .hero-title{font-size:38px;}
-      .type-preview,.all-grid{grid-template-columns:repeat(4,1fr);}
-      .q-text{font-size:17px;}
-      .res-code{font-size:44px;}
-      .res-name{font-size:18px;}
-    }
-  </style>
+@media (max-width: 1024px) {
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .chart-grid { grid-template-columns: 1fr; }
+  .report-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
 </head>
 <body>
-<canvas id="bg"></canvas>
-
-<!-- ====== 首页 ====== -->
-<div id="pg-intro">
-  <div class="wrap">
-    <div class="intro-hero">
-      <span class="hero-emoji">🐟</span>
-      <h1 class="hero-title">DBTI</h1>
-      <p class="hero-en">我呆固我在，别人笑我太疯癫，我笑别人看不穿</p>
+<div class="app">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">R</div>
+        <div class="sidebar-logo-text">研伴respal<small>达人投放工作台</small></div>
+      </div>
     </div>
-
-    <div class="intro-desc">
-      <h3>🧬 关于这份测试</h3>
-      <p>
-        通过 <strong>12 道情景题</strong>，从你的<strong>花钱方式、鱼的存活率、处理方式、扩张欲望</strong>四个维度，
-        把你精准匹配到 16 种养鱼人格之一。<br><br>
-        无论你是 <strong>鱼市提款机 ATM</strong>，还是 <strong>忍辱负重的家属 HELP</strong>，
-        这里都有你的位置。
-      </p>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">主菜单</div>
+      <div class="nav-item active" data-page="dashboard" onclick="navigateTo('dashboard')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        工作台首页
+      </div>
+      <div class="nav-item" data-page="influencers" onclick="navigateTo('influencers')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        达人库 <span class="nav-badge" id="navInfCount">0</span>
+      </div>
+      <div class="nav-item" data-page="analysis" onclick="navigateTo('analysis')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21H4.6a.6.6 0 0 1-.6-.6V3"/><path d="M7 14l4-4 3 3 5-6"/></svg>
+        达人分析
+      </div>
+      <div class="nav-item" data-page="campaigns" onclick="navigateTo('campaigns')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7h-3V4a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v3H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1z"/><path d="M9 7V5h6v2"/></svg>
+        投放管理 <span class="nav-badge" id="navCmpCount" style="background:var(--warning);color:white">0</span>
+      </div>
+      <div class="nav-item" data-page="export" onclick="navigateTo('export')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        数据导出
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      数据来源：腾讯文档<br>研伴respal达人筛选表
     </div>
+  </aside>
 
-    <div class="type-preview" id="intro-types"></div>
-
-    <div style="text-align:center;margin-bottom:12px;">
-      <p style="color:var(--text-muted);font-size:14px;margin-bottom:22px;">共 12 道题 · 约 3 分钟 · 结果100%精准（误差±16种）</p>
-      <button class="btn-big" onclick="startQuiz()">🎣 开始测试</button>
-    </div>
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-title" id="pageTitle">工作台首页</div>
+      <div class="topbar-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" placeholder="搜索达人名称、分类..." oninput="handleGlobalSearch(this.value)" id="globalSearch">
+      </div>
+      <div class="topbar-actions">
+        <button class="btn btn-primary" onclick="navigateTo('analysis')">+ 达人分析</button>
+      </div>
+    </header>
+    <div class="content" id="pageContent"></div>
   </div>
 </div>
 
-<!-- ====== 测试页 ====== -->
-<div id="pg-quiz">
-  <div class="wrap">
-    <div class="quiz-top">
-      <div class="prog-wrap"><div class="prog-bar" id="prog" style="width:0%"></div></div>
-      <div class="prog-txt" id="prog-txt">第 1 题 / 共 12 题</div>
-    </div>
-    <div id="q-area"></div>
-    <div class="nav-row">
-      <button class="btn-nav" id="btn-prev" onclick="prevQ()" disabled>← 上一题</button>
-      <button class="btn-nav pri" id="btn-next" onclick="nextQ()">下一题 →</button>
-    </div>
-  </div>
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalContent"></div>
 </div>
 
-<!-- ====== 结果页 ====== -->
-<div id="pg-result">
-  <div class="wrap">
-    <div class="res-hero">
-      <span class="res-emoji" id="r-emoji">🐟</span>
-      <div class="res-code" id="r-code">ATM</div>
-      <div class="res-name" id="r-name">鱼市提款机</div>
-      <div class="res-alias" id="r-alias">冤种巨富 / 商家最爱</div>
-    </div>
-
-    <div class="quote-banner" id="r-quote"></div>
-
-    <div class="res-card">
-      <h3>📋 人格设定</h3>
-      <div class="alias-row" id="r-alias-tags"></div>
-      <div class="setting-text" id="r-setting"></div>
-      <div class="quote-box" id="r-qbox"></div>
-    </div>
-
-    <div class="res-card">
-      <h3>📊 与各人格匹配度</h3>
-      <div class="match-grid" id="r-match"></div>
-    </div>
-
-    <div class="res-card">
-      <h3>🌊 全部 16 型 · 点击查看</h3>
-      <div class="all-grid" id="r-all"></div>
-    </div>
-
-    <button class="btn-retry" onclick="retryQuiz()">🔄 重新测试 · 看看这次你是哪只</button>
-  </div>
-</div>
-
-<!-- 弹窗 -->
-<div class="overlay" id="modal" onclick="closeM(event)">
-  <div class="mbox">
-    <button class="mclose" onclick="closeM(null)">✕</button>
-    <span class="m-emoji" id="m-emoji"></span>
-    <div class="m-code" id="m-code"></div>
-    <div class="m-name" id="m-name"></div>
-    <div class="m-alias" id="m-alias"></div>
-    <div class="m-setting" id="m-setting"></div>
-    <div class="m-quote" id="m-quote"></div>
-  </div>
-</div>
+<div class="toast" id="toast"></div>
 
 <script>
-// ===================== 粒子背景 =====================
-(()=>{
-  const c=document.getElementById('bg'),ctx=c.getContext('2d');
-  let W,H;
-  const resize=()=>{W=c.width=innerWidth;H=c.height=innerHeight;};
-  resize(); addEventListener('resize',resize);
-  const cols=['#00d4ff','#8b5cf6','#10b981','#f59e0b','#ef4444','#ec4899'];
-  const pts=Array.from({length:22},()=>({
-    x:Math.random(),vy:Math.random()*.25+.08,
-    r:Math.random()*5+2,col:cols[Math.random()*cols.length|0],
-    op:Math.random()*.25+.08,ph:Math.random()*Math.PI*2
-  }));
-  let t0=null;
-  const draw=ts=>{
-    if(!t0)t0=ts;
-    const t=(ts-t0)/1000;
-    ctx.clearRect(0,0,W,H);
-    pts.forEach(p=>{
-      const y=H-(((t*p.vy*50+p.ph*H/Math.PI/2)%H+H)%H);
-      const x=p.x*W+Math.sin(t*.4+p.ph)*28;
-      ctx.beginPath();ctx.arc(x,y,p.r,0,Math.PI*2);
-      ctx.fillStyle=p.col+(Math.round(p.op*255).toString(16).padStart(2,'0'));
-      ctx.fill();
-    });
-    requestAnimationFrame(draw);
-  };
-  requestAnimationFrame(draw);
-})();
+const TABLE_NOTE = "需要发小红书+任意一平台（起码要两个平台）遇到卡审，就看视频里有没有出现论文，把有论文的地方全部改成文献或者paper";
+const INITIAL_DATA = [{"id": "july_001", "name": "胖胖的科研笔记", "homepageUrl": "https://xhslink.com/m/8JGLigklpja", "followers": 4000, "followersWan": 0.4, "coopType": "水下", "category": "研究生", "contactPerson": "袁梦", "contactInfo": "trymybest0721", "highlights": "数据好，爆文多", "hasGroupChat": "有", "timeline": "大纲时间： 7.8\n初稿时间：7.10\n发文时间：7.13", "finalContent": "", "notes": "抖音还没发", "finalPrice": "双平台500", "pgyPrice": "/", "cost": 500, "rebate": "/", "rebateDone": "/", "publishDate": "", "syncPlatform": "抖音", "redemptionCode": "45PBU35E", "publishLink1": "http://xhslink.com/o/4flZBrZpHxX", "publishLink2": "https://v.douyin.com/eTB1sBtP8bg/ r@E.Hi 05/18 IiC:/ :3pm", "views": 2002, "likes": 1045, "saves": 1122, "totalEngagement": 4169, "shares": 0, "status": "已合作", "source": "7月合作达人"}, {"id": "july_002", "name": "是Dr.可达吖", "homepageUrl": "https://xhslink.com/m/33HsaK6feqo", "followers": 8000, "followersWan": 0.8, "coopType": "报备", "category": "审稿人", "contactPerson": "袁梦", "contactInfo": "QiS_1208", "highlights": "", "hasGroupChat": "无", "timeline": "大纲时间：7.7\n脚本时间：7.9\n初稿时间：7.11\n发布时间：7.12", "finalContent": "", "notes": "内容希望她往审稿人坦白局方向做", "finalPrice": "6月报备图文：510\n6月报备视频：900\n水下图文：\\\n水下视频：\\\n返点35%", "pgyPrice": "792", "cost": 657, "rebate": "135", "rebateDone": "已返", "publishDate": "", "syncPlatform": "", "redemptionCode": "ULBGUUQS", "publishLink1": "https://www.xiaohongshu.com/discovery/item/6a531800000000002200bc34?source=webshare&xhsshare=pc_web&xsec_token=ABbxGlrFLCryt7nR33nZ6Kyr3P1OnUL4VnUE5p00rCK9U=&xsec_source=pc_share", "publishLink2": "", "views": 55087, "likes": 6584, "saves": 3045, "totalEngagement": 10571, "shares": 0, "status": "已合作", "source": "7月合作达人"}, {"id": "july_003", "name": "Quen", "homepageUrl": "https://xhslink.com/m/2O5khifE8bX", "followers": 4000, "followersWan": 0.4, "coopType": "报备", "category": "", "contactPerson": "袁梦", "contactInfo": "hqy25571765677776765", "highlights": "", "hasGroupChat": "", "timeline": "大纲时间：7月2日\n初稿时间：7月5日\n发文时间：7月8日", "finalContent": "", "notes": "", "finalPrice": "6月报备图文：300\n6月报备视频：400\n水下图文：360\n水下视频：459", "pgyPrice": "440", "cost": 440, "rebate": "0", "rebateDone": "", "publishDate": "", "syncPlatform": "抖音、视频号、微博、公众号", "redemptionCode": "26FAD33Z", "publishLink1": "http://xhslink.com/o/3Y4cDrbnNYT", "publishLink2": "", "views": 1888, "likes": 96, "saves": 105, "totalEngagement": 303, "shares": 0, "status": "已合作", "source": "7月合作达人"}, {"id": "july_004", "name": "🌳邱燃燃", "homepageUrl": "https://xhslink.com/m/XGkGbYjryN", "followers": 0, "followersWan": 0, "coopType": "报备", "category": "", "contactPerson": "袁梦", "contactInfo": "18720202270", "highlights": "", "hasGroupChat": "", "timeline": "大纲时间：7.3\n初稿时间：7.5\n发文时间：7.6", "finalContent": "", "notes": "", "finalPrice": "6月报备图文：500\n6月报备视频：550\n水下图文：400\n水下视频：450\n最高返点（40%+优选，走水下不用填）：30%", "pgyPrice": "440", "cost": 390, "rebate": "50", "rebateDone": "已返", "publishDate": "", "syncPlatform": "公众号", "redemptionCode": "CPLW99M2", "publishLink1": "http://xhslink.com/o/8zhfar8Mtul", "publishLink2": "", "views": 22176, "likes": 5786, "saves": 5462, "totalEngagement": 11756, "shares": 0, "status": "已合作", "source": "7月合作达人"}, {"id": "july_005", "name": "小明老师", "homepageUrl": "https://xhslink.com/m/6dp1JlHqhW1", "followers": 41000, "followersWan": 4.1, "coopType": "报备", "category": "", "contactPerson": "袁梦", "contactInfo": "NKXMLS", "highlights": "", "hasGroupChat": "", "timeline": "脚本时间：7.10\n初稿时间：7.13\n发布时间：7.14", "finalContent": "", "notes": "为了投流 改走报备", "finalPrice": "6月报备图文：不做图文\n6月报备视频：2909\n水下图文：\n水下视频：2000\n最高返点（40%+优选，走水下不用填）：达人要求到手2000", "pgyPrice": "2559.2", "cost": 2327, "rebate": "100", "rebateDone": "已返", "publishDate": "", "syncPlatform": "不免费同步 双平台视频3200", "redemptionCode": "", "publishLink1": "https://www.xiaohongshu.com/discovery/item/6a59deb7000000000402802e?source=webshare&xhsshare=pc_web&xsec_token=ABj4Wfdd1Q3tETDWA8PnEWz1OWH6Wd-JG9sncE7XCIyJ0=&xsec_source=pc_share", "publishLink2": "", "views": 4478, "likes": 303, "saves": 348, "totalEngagement": 716, "shares": 0, "status": "已合作", "source": "7月合作达人"}, {"id": "july_006", "name": "下辈子不读书只做猪", "homepageUrl": "https://xhslink.com/m/3nkUGGp5Xre", "followers": 60000, "followersWan": 6.0, "coopType": "报备", "category": "研究生", "contactPerson": "袁梦", "contactInfo": "CyyyyyL-", "highlights": "科研干货分享", "hasGroupChat": "有", "timeline": "大纲时间：7.5\n脚本时间：7.6\n初稿时间：7.9\n发布时间：7.12", "finalContent": "", "notes": "达人答应保价七月 七月蒲公英涨价成6000 所以要多加服务费", "finalPrice": "6月报备图文：4000\n6月报备视频：5000\n水下图文：2500\n水下视频：3000\n最高返点（40%+优选，走水下不用填）：30%", "pgyPrice": "5280", "cost": 3680, "rebate": "1300", "rebateDone": "已返", "publishDate": "", "syncPlatform": "抖音b站", "redemptionCode": "7YXJ4PFD", "publishLink1": "https://www.xiaohongshu.com/discovery/item/6a57605d000000001702aa9e?source=webshare&xhsshare=pc_web&xsec_token=ABZvw8olWaVI_vd5AZ5DMeyiWcLO4KM4h__4LKnm4tVno=&xsec_source=pc_share", "publishLink2": "", "views": 4814, "likes": 389, "saves": 481, "totalEngagement": 965, "shares": 0, "status": "已合作", "source": "7月合作达人"}, {"id": "july_007", "name": "认真搞钱的王总", "homepageUrl": "https://xhslink.com/m/7KWRUW4QhgX", "followers": 4000, "followersWan": 0.4, "coopType": "报备", "category": "研究生已毕业", "contactPerson": "袁梦", "contactInfo": "Continent", "highlights": "经验分享", "hasGroupChat": "有", "timeline": "大纲时间：7.1\n脚本时间：7.2\n初稿时间：7.3", "finalContent": "副本脚本-研伴.docx", "notes": "", "finalPrice": "6月报备图文：230\n6月报备视频：430\n水下图文：200\n水下视频：350", "pgyPrice": "473", "cost": 473, "rebate": "0", "rebateDone": "", "publishDate": "", "syncPlatform": "B站", "redemptionCode": "GFALT7N9", "publishLink1": "http://xhslink.com/o/7RlIkrHLSky", "publishLink2": "", "views": 28128, "likes": 3054, "saves": 1529, "totalEngagement": 4832, "shares": 0, "status": "已合作", "source": "7月合作达人"}, {"id": "july_008", "name": "南方的小二毛", "homepageUrl": "https://www.xiaohongshu.com/user/profile/5f673ed4000000000100bf1b?xsec_token=YB-Fk0a-5eOVmz5FJzuFstCz229sYP2dXMLuVmaIJBiuk=&xsec_source=app_share&xhsshare=WeixinSession&appuid=5b65cbcd4eacab171436c1d5&apptime=1782810358&share_id=f3c04eda3af44ca6b09bf6b66ad7b75e", "followers": 15000, "followersWan": 1.5, "coopType": "水下", "category": "新入职高校老师", "contactPerson": "孔淑杰", "contactInfo": "TTZZZRJJKKSH", "highlights": "科研推文很多", "hasGroupChat": "无", "timeline": "初稿：7月8号发布：7月10号", "finalContent": "", "notes": "延期了 如果15号前没办法出稿就推迟到下次再合作", "finalPrice": "水下 350", "pgyPrice": "", "cost": 350, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "/", "redemptionCode": "N5878E5F", "publishLink1": "https://www.xiaohongshu.com/discovery/item/6a55fd59000000001603ec52?source=webshare&xhsshare=pc_web&xsec_token=ABNzJcMGzMDhnQ5AQaJ_B5cm_T3Yhz-WJ2LGshpSctW9o=&xsec_source=pc_share", "publishLink2": "", "views": 4217, "likes": 175, "saves": 220, "totalEngagement": 426, "shares": 0, "status": "已合作", "source": "7月合作达人"}, {"id": "july_009", "name": "科研工具人", "homepageUrl": "https://xhslink.com/m/1i73qjksdS5", "followers": 20000, "followersWan": 2.0, "coopType": "报备", "category": "科研工具分享", "contactPerson": "袁梦", "contactInfo": "keyangongjuren", "highlights": "内容很专业，可读性强", "hasGroupChat": "无", "timeline": "大纲时间：7月5号\n脚本时间：7月5号\n初稿时间：7月7号\n发布时间：7月8号", "finalContent": "", "notes": "1000块能拿下最好", "finalPrice": "6月报备图文：700\n6月报备视频：1000\n水下图文：500\n水下视频：700\n最高返点（40%+优选，走水下不用填）：30%", "pgyPrice": "1320", "cost": 780, "rebate": "500", "rebateDone": "已返", "publishDate": "", "syncPlatform": "抖音", "redemptionCode": "YNLVSFUK", "publishLink1": "http://xhslink.com/o/3vDcjQ9Q9CF", "publishLink2": "", "views": 1524, "likes": 196, "saves": 297, "totalEngagement": 602, "shares": 0, "status": "已合作", "source": "7月合作达人"}, {"id": "july_010", "name": "长腿花花姐姐", "homepageUrl": "https://xhslink.com/m/93R9pEGjNAt", "followers": 11000, "followersWan": 1.1, "coopType": "报备", "category": "国企管理者", "contactPerson": "袁梦", "contactInfo": "Autumn789", "highlights": "评职称论文发表有爆文", "hasGroupChat": "", "timeline": "脚本时间：7.6\n初稿时间：7.7\n发布时间：7.8", "finalContent": "", "notes": "想让她出评职称期刊内容，但是数据一般，看看能不能砍20% 768这样 不行原价也行", "finalPrice": "6月报备图文：430\n6月报备视频：930\n水下图文：\n水下视频：600\n最高返点（40%+优选，走水下不用填）：25%", "pgyPrice": "818.4", "cost": 771, "rebate": "46.5", "rebateDone": "已返", "publishDate": "", "syncPlatform": "B站，快手", "redemptionCode": "PK6U7JMT", "publishLink1": "http://xhslink.com/o/7O6XYyxScv4", "publishLink2": "", "views": 3918, "likes": 348, "saves": 619, "totalEngagement": 1241, "shares": 0, "status": "已合作", "source": "7月合作达人"}, {"id": "july_011", "name": "可乐聊ai", "homepageUrl": "https://xhslink.com/m/37WoxEo2m9r", "followers": 0, "followersWan": 0, "coopType": "水下", "category": "", "contactPerson": "袁梦", "contactInfo": "ItCoke", "highlights": "", "hasGroupChat": "", "timeline": "脚本时间：7 月 5 号\n初稿时间：7 月 8 号\n发布时间：7 月 13 号", "finalContent": "", "notes": "加200发抖音，抖音数据比较好", "finalPrice": "水下图文：200\n水下视频：400\n最高返点（40%+优选，走水下不用填）：", "pgyPrice": "", "cost": 600, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "视频号，快手，b 站", "redemptionCode": "7H4P9LFH", "publishLink1": "http://xhslink.com/o/4V2mmsoLPyX", "publishLink2": "https://v.douyin.com/KRdn6L5Kfrs/", "views": 1256, "likes": 225, "saves": 169, "totalEngagement": 113, "shares": 0, "status": "已合作", "source": "7月合作达人"}, {"id": "july_012", "name": "凹凸米Autumn", "homepageUrl": "https://xhslink.com/m/51YQpcdFILh", "followers": 7000, "followersWan": 0.7, "coopType": "报备", "category": "青椒", "contactPerson": "袁梦", "contactInfo": "", "highlights": "最近数据稳定", "hasGroupChat": "有", "timeline": "脚本时间：7.11\n初稿时间：7.13前\n发布时间：7.14", "finalContent": "", "notes": "让他继续做“一个月写完一篇计算机Paper”", "finalPrice": "7月报备图文：500\n7月报备视频：999\n水下图文：400\n水下视频：800\n最高返点（40%+优选，走水下不用填）：25%", "pgyPrice": "800", "cost": 829, "rebate": "50.75", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "https://www.xiaohongshu.com/discovery/item/6a5c62a900000000110183b5?source=webshare&xhsshare=pc_web&xsec_token=ABfS-ZflmvnH3LWIyOkPyM-L_6dcMJD51LxpnrTo2dVTE=&xsec_source=pc_share", "publishLink2": "", "views": 1004, "likes": 75, "saves": 48, "totalEngagement": 142, "shares": 0, "status": "已合作", "source": "7月合作达人"}, {"id": "july_013", "name": "西瓜拌沃柑", "homepageUrl": "https://xhslink.com/m/vh89b0FEES", "followers": 8000, "followersWan": 0.8, "coopType": "水下+报备", "category": "", "contactPerson": "袁梦", "contactInfo": "", "highlights": "抖音3.3w 抖音数据不错", "hasGroupChat": "", "timeline": "脚本时间：7.12\n初稿时间：7.13\n发布时间：7.15", "finalContent": "", "notes": "做科研绘图 蒲公英960 水下再给640 为了走聚光", "finalPrice": "双平台1600", "pgyPrice": "", "cost": 1696, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "https://www.xiaohongshu.com/discovery/item/6a6334bf000000000f0169b3?source=webshare&xhsshare=pc_web&xsec_token=ABnFJQiihybGSffAKnrqsfCnTYlAsqrffyKAuU7N2ldak=&xsec_source=pc_share", "publishLink2": "", "views": 1781, "likes": 180, "saves": 265, "totalEngagement": 514, "shares": 0, "status": "已合作", "source": "7月合作达人"}, {"id": "july_014", "name": "Pioneer读研版", "homepageUrl": "https://xhslink.com/m/CF2CFhUrrK", "followers": 2000, "followersWan": 0.2, "coopType": "报备", "category": "", "contactPerson": "袁梦", "contactInfo": "18066071571", "highlights": "", "hasGroupChat": "有", "timeline": "", "finalContent": "", "notes": "竞品合作，停更近两个月，但是便宜数据不错", "finalPrice": "品牌产品：研伴Respal\n小红书昵称：Pioneer读研版\n7月报备图文：220\n7月报备视频：320\n水下图文：200\n水下视频：300", "pgyPrice": "220", "cost": 242, "rebate": "0", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "https://www.xiaohongshu.com/discovery/item/6a59cdf8000000000903616c?source=webshare&xhsshare=pc_web&xsec_token=ABj4Wfdd1Q3tETDWA8PnEWz-Y7NBKKeVlayWnw1uazrKQ=&xsec_source=pc_share", "publishLink2": "", "views": 587, "likes": 18, "saves": 17, "totalEngagement": 44, "shares": 0, "status": "已合作", "source": "7月合作达人"}, {"id": "july_015", "name": "就是April啊", "homepageUrl": "https://xhslink.com/m/AbhV22JQS2s", "followers": 0, "followersWan": 0, "coopType": "报备", "category": "", "contactPerson": "袁梦", "contactInfo": "15150517228", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "notes": "", "finalPrice": "7月报备图文：300\n7月报备视频：500\n水下图文：280\n水下视频：480", "pgyPrice": "", "cost": 550, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "https://www.xiaohongshu.com/discovery/item/6a55ecdd000000000f01e73c?source=webshare&xhsshare=pc_web&xsec_token=ABNzJcMGzMDhnQ5AQaJ_B5cqvy4dd6kR2LLZbdWPSgINs=&xsec_source=pc_share", "publishLink2": "", "views": 1130, "likes": 140, "saves": 179, "totalEngagement": 382, "shares": 0, "status": "已合作", "source": "7月合作达人"}, {"id": "pend_002", "name": "说论文的小萝卜", "homepageUrl": "https://xhslink.com/m/9PUFwvQp1OT", "followers": 900, "followersWan": 0.09, "coopType": "", "category": "研究生", "contactPerson": "袁梦", "contactInfo": "rsky-0201", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_003", "name": "超A酸奶-读博版", "homepageUrl": "https://www.xiaohongshu.com/user/profile/65d4b726000000000d025f67?xsec_token=ABcczc1lOSJ3UBECPdfva3u4fI8fPPPvDJTvS5y222WfE%3D&xsec_source=pc_search", "followers": 25000, "followersWan": 2.5, "coopType": "", "category": "研究生", "contactPerson": "袁梦", "contactInfo": "", "highlights": "合作笔记数据好/研究生写论文垂类", "hasGroupChat": "有", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "报备图文1500 视频3000 \n水下图文1200 视频2500", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_004", "name": "小英镑玩AI", "homepageUrl": "", "followers": 0, "followersWan": 0, "coopType": "", "category": "AI工具推荐", "contactPerson": "袁梦", "contactInfo": "", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_005", "name": "今天你读文献了", "homepageUrl": "", "followers": 0, "followersWan": 0, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_006", "name": "安然若风Auro", "homepageUrl": "https://xhslink.com/m/6rluffXxAsx", "followers": 9000, "followersWan": 0.9, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "gdy-cassie", "highlights": "2000+研究生微信好友", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "不合作", "notes": "数据很差 只给他100 200这样 看在她微信好友多的份上", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "不合作", "source": "待筛选小红书达人"}, {"id": "pend_010", "name": "唐瓜瓜的小店", "homepageUrl": "", "followers": 0, "followersWan": 0, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_011", "name": "读博小菜鸡", "homepageUrl": "", "followers": 0, "followersWan": 0, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "要400", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_012", "name": "正在读博的学术小辣鸡", "homepageUrl": "", "followers": 0, "followersWan": 0, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_013", "name": "佳佳怪", "homepageUrl": "http://xhslink.com/o/3XqaoBxdDeU", "followers": 22000, "followersWan": 2.2, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "iii66yy", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "7月报备图文：500\n7月报备视频：2300", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_014", "name": "田壮壮", "homepageUrl": "https://xhslink.com/m/8Gso79wXgpm", "followers": 0, "followersWan": 0, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "6月报备图文：3000  （7月4000）\n6月报备视频：5000    （7月6000）\n水下图文：-\n水下视频：-\n最高返点41%", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_015", "name": "Sylvia is lucky💐", "homepageUrl": "", "followers": 0, "followersWan": 0, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "17208265900", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_016", "name": "带带在华科", "homepageUrl": "", "followers": 0, "followersWan": 0, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_017", "name": "团团睡不醒", "homepageUrl": "", "followers": 0, "followersWan": 0, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_020", "name": "别管我啦", "homepageUrl": "https://xhslink.com/m/1Kd4n0tV3sb", "followers": 19000, "followersWan": 1.9, "coopType": "", "category": "研究生", "contactPerson": "袁梦", "contactInfo": "rra012", "highlights": "", "hasGroupChat": "有", "timeline": "", "finalContent": "", "confirmedCoop": "不合作", "notes": "", "finalPrice": "6月报备图文：1000\n6月报备视频：2500（返点20%）\n水下图文：\n水下视频：2000", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "抖音", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "不合作", "source": "待筛选小红书达人"}, {"id": "pend_021", "name": "Spark", "homepageUrl": "https://xhslink.com/m/5J2Ub6DQo8I", "followers": 7000, "followersWan": 0.7, "coopType": "", "category": "研究生", "contactPerson": "袁梦", "contactInfo": "15071535970", "highlights": "图文/学习经验分享", "hasGroupChat": "有", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "6月报备图文：800\n6月报备视频：不接\n水下图文：600\n水下视频：不接\n最高返点（40%+优选，走水下不用填）：报备返20%\n是否可以保价7月：可\n6/7月档期（15号前必须发布）：7.15之前", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_024", "name": "Mak鼠球", "homepageUrl": "https://xhslink.com/m/3hyyomx8hdv", "followers": 9000, "followersWan": 0.9, "coopType": "", "category": "留学生", "contactPerson": "袁梦", "contactInfo": "", "highlights": "数据好，近期有超级大爆文", "hasGroupChat": "有", "timeline": "", "finalContent": "", "confirmedCoop": "不合作", "notes": "", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "不合作", "source": "待筛选小红书达人"}, {"id": "pend_025", "name": "吴鲤投", "homepageUrl": "https://xhslink.com/m/8hJwCcjLYSO", "followers": 4000, "followersWan": 0.4, "coopType": "", "category": "抽象研究生（故事型）", "contactPerson": "袁梦", "contactInfo": "", "highlights": "数据很好", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_026", "name": "HanyuZ", "homepageUrl": "https://xhslink.com/m/EZsavBwmqT", "followers": 36000, "followersWan": 3.6, "coopType": "", "category": "博三交换生", "contactPerson": "袁梦", "contactInfo": "HyZzx27", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "12个群", "finalPrice": "6月报备图文：3500\n6月报备视频：5000\n水下图文：3000\n水下视频：4500", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_027", "name": "Asa阿洒", "homepageUrl": "https://xhslink.com/m/1lafuvdMd1x", "followers": 9000, "followersWan": 0.9, "coopType": "", "category": "ai产品经理", "contactPerson": "袁梦", "contactInfo": "18888320524", "highlights": "爆文多/但是更新频率低，疑似删帖", "hasGroupChat": "无", "timeline": "", "finalContent": "", "confirmedCoop": "不合作", "notes": "只能给500！！坚持底线", "finalPrice": "只接水下 视频1000 图文300  不接受返点", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "不合作", "source": "待筛选小红书达人"}, {"id": "pend_030", "name": "张苹果博士", "homepageUrl": "https://xhslink.com/m/Sqv0FPPG8Q", "followers": 24000, "followersWan": 2.4, "coopType": "", "category": "科研/创业", "contactPerson": "袁梦", "contactInfo": "", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "有点纠结要不要投", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_033", "name": "煜林AI", "homepageUrl": "", "followers": 0, "followersWan": 0, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "如果选的话就走水下 问能不能同步其他平台", "finalPrice": "6月报备图文：1600\n6月报备视频：3500\n水下图文：1200\n水下视频：3000\n最高返点（40%+优选，走水下不用填）：20", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_034", "name": "暖阳博士", "homepageUrl": "https://xhslink.com/m/4StlEj9oUGn", "followers": 0, "followersWan": 0, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "JTshiyi599", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "报备图文1900 报备视频3016 返点30%", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_035", "name": "小法师闪闪✨", "homepageUrl": "小法师闪闪✨ - 小红书", "followers": 2000, "followersWan": 0.2, "coopType": "", "category": "研究生", "contactPerson": "刘家源", "contactInfo": "", "highlights": "有爆款", "hasGroupChat": "无", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_036", "name": "向艺bo进击的牛牛", "homepageUrl": "向艺bo进击的牛牛 - 小红书", "followers": 6000, "followersWan": 0.6, "coopType": "", "category": "研究生", "contactPerson": "刘家源", "contactInfo": "", "highlights": "有爆款", "hasGroupChat": "有", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_037", "name": "YoKkk", "homepageUrl": "YoKkk - 小红书", "followers": 3000, "followersWan": 0.3, "coopType": "", "category": "研究生", "contactPerson": "刘家源", "contactInfo": "", "highlights": "有爆款，数据不错", "hasGroupChat": "有", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_039", "name": "超级打工者（职场新人版）", "homepageUrl": "https://xhslink.com/m/2KPzgJEIoQ9", "followers": 8000, "followersWan": 0.8, "coopType": "", "category": "", "contactPerson": "舒仪", "contactInfo": "", "highlights": "有爆款", "hasGroupChat": "无", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "7月报备图文：463\n最高返点（40%+优选，走水下不用填）：30%", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_040", "name": "Jimmy吉米弟弟在研究语言学", "homepageUrl": "", "followers": 10000, "followersWan": 1.0, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "不合作", "notes": "神人一个 不合作", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "不合作", "source": "待筛选小红书达人"}, {"id": "pend_041", "name": "萌萌本萌🌸🌸🌸", "homepageUrl": "https://xhslink.com/m/8oIT3KDeiJv", "followers": 19000, "followersWan": 1.9, "coopType": "", "category": "", "contactPerson": "舒仪", "contactInfo": "", "highlights": "有爆款，近期数据不错", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_043", "name": "心事儿（搞笑女）", "homepageUrl": "https://xhslink.com/m/2ykssLeYP6p", "followers": 5000, "followersWan": 0.5, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "看下水下能不能500合作", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_044", "name": "80分女孩", "homepageUrl": "https://xhslink.com/m/74kiTy4jrbS", "followers": 7000, "followersWan": 0.7, "coopType": "", "category": "", "contactPerson": "舒仪", "contactInfo": "", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "7月报备图文：474\n7月报备视频：964\n水下图文：无\n水下视频：无\n最高返点（40%+优选，走水下不用填）：没写", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_046", "name": "小笙的尾巴", "homepageUrl": "https://xhslink.com/m/1ZkCQjjel0y", "followers": 1000, "followersWan": 0.1, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "", "highlights": "类型符合，偶尔有爆款，价格合适，看看能不能再砍", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "看120能不能走水下拿下", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_047", "name": "yesss", "homepageUrl": "https://xhslink.com/m/8xZwdcroubQ", "followers": 9000, "followersWan": 0.9, "coopType": "", "category": "", "contactPerson": "舒仪", "contactInfo": "", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "7月报备图文：1000\n7月报备视频：1200\n水下图文：800\n水下视频：1000\n最高返点（40%+优选，走水下不用填）：25", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_048", "name": "RR饱饱", "homepageUrl": "https://xhslink.com/m/9ZD0sTovKTb", "followers": 12000, "followersWan": 1.2, "coopType": "", "category": "", "contactPerson": "舒仪", "contactInfo": "", "highlights": "数据稳定，有几个爆款", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "7月报备图文： 1000\n7月报备视频：2000\n水下图文：水下暂时不考虑\n水下视频：\n最高返点（40%+优选，走水下不用填）：20", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_049", "name": "皮蛋要躺平", "homepageUrl": "https://xhslink.com/m/26uWTQPeXt9", "followers": 4000, "followersWan": 0.4, "coopType": "", "category": "", "contactPerson": "舒仪", "contactInfo": "", "highlights": "有爆款，阅读中位数高", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "不合作", "notes": "很便宜", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "不合作", "source": "待筛选小红书达人"}, {"id": "pend_050", "name": "嗜血锅包肉（读博版", "homepageUrl": "https://xhslink.com/m/5grqrVYH2Z2", "followers": 2000, "followersWan": 0.2, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "You987654me", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_051", "name": "菠萝薯塔", "homepageUrl": "https://xhslink.com/m/2WIEfuJjj7T", "followers": 9000, "followersWan": 0.9, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_052", "name": "方便面在成长（研二版）", "homepageUrl": "https://xhslink.com/m/6vTIz5ZFsqO", "followers": 8000, "followersWan": 0.8, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "19861173106", "highlights": "有论文相关爆款", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "最近数据不好，看看能不能砍到返点60，或者水下300一篇400一篇？", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_053", "name": "橙宇宙", "homepageUrl": "https://v.douyin.com/NCz2YYII_lI/ 0@4.com", "followers": 6000, "followersWan": 0.6, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "", "highlights": "抖音研0工具推荐有爆款", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "看看能不能双平台500解决 走", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_054", "name": "四火大魔王", "homepageUrl": "", "followers": 0, "followersWan": 0, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "Freya04004", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "谈160走蒲公英", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_055", "name": "鹿小彤同学", "homepageUrl": "", "followers": 0, "followersWan": 0, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "G-E-M816710", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_056", "name": "全人工LCMS分析仪", "homepageUrl": "", "followers": 0, "followersWan": 0, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_057", "name": "雀雀", "homepageUrl": "https://xhslink.com/m/1v8iEU6CFnP", "followers": 130000, "followersWan": 13.0, "coopType": "", "category": "", "contactPerson": "舒仪", "contactInfo": "", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_058", "name": "窝囊博士的科研废料", "homepageUrl": "https://v.douyin.com/aH3TM2txXa4/ 8@0.com :0pm", "followers": 0, "followersWan": 0, "coopType": "", "category": "", "contactPerson": "袁梦", "contactInfo": "", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "抖音数据不错 下一批投放可以考虑", "finalPrice": "水下图文：1600\n水下视频：2200\n最高返点（40%+优选，走水下不用填）：\n是否可以保价7月：可", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}, {"id": "pend_059", "name": "超A酸奶-读博版", "homepageUrl": "https://xhslink.cn/m/6D8t7ilbB5I", "followers": 25000, "followersWan": 2.5, "coopType": "", "category": "", "contactPerson": "舒仪", "contactInfo": "", "highlights": "", "hasGroupChat": "", "timeline": "", "finalContent": "", "confirmedCoop": "", "notes": "", "finalPrice": "", "pgyPrice": "", "cost": 0, "rebate": "", "rebateDone": "", "publishDate": "", "syncPlatform": "", "redemptionCode": "", "publishLink1": "", "publishLink2": "", "views": 0, "likes": 0, "saves": 0, "totalEngagement": 0, "shares": 0, "status": "待筛选", "source": "待筛选小红书达人"}];
 
-// ===================== 16 型数据 =====================
-const TYPES = {
-  ATM:{
-    name:'鱼市提款机', emoji:'💳',
-    alias:['冤种巨富','商家最爱'],
-    setting:'鱼死得越快，买得越嗨。不懂技术，全靠钞能力给鱼市贡献 GDP。每次死鱼都是一次购物节，信用卡都是鱼市的联名款。',
-    quote:'我不知道它为什么死，我只知道换一条新的要多少钱。',
-    scores:{money:3,death:3,logic:0,expand:2}
+const STORAGE_KEY = 'respal_influencer_workbench_v2';
+
+const DB = {
+  get() {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const d = JSON.parse(stored);
+        if (d.influencers && d.influencers.length > 0) return d;
+      }
+      return this.init();
+    } catch(e) { return this.init(); }
   },
-  DEAD:{
-    name:'灵位批发商', emoji:'⚰️',
-    alias:['死鱼大师','鱼见愁'],
-    setting:'养啥死啥，缸里常年漂着白毛，网兜是他身体的延伸。不是他不努力，是鱼的寿命跟他天生八字不合。',
-    quote:'这批鱼命薄，不怪我，下一批肯定能活过头七。',
-    scores:{money:1,death:3,logic:0,expand:2}
+  save(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); },
+  init() {
+    const data = {
+      influencers: INITIAL_DATA.map((inf, i) => ({...inf, id: inf.id || ('inf_' + (i+1).toString().padStart(3,'0'))})),
+      meta: { createdAt: new Date().toISOString(), version: '2.0', source: '腾讯文档-研伴respal达人筛选表' }
+    };
+    this.save(data);
+    return data;
   },
-  JUMP:{
-    name:'地毯搜索队', emoji:'🔍',
-    alias:['蹦迪终结者','干尸收集员'],
-    setting:'专门养雷龙、龙鱼这种想不开的。每天回家第一件事是趴在地毯上找鱼。找到了是惊喜，没找到是失踪案。',
-    quote:'诶？昨晚还在缸里，今天怎么在沙发缝里缩成小鱼干了？',
-    scores:{money:1,death:3,logic:0,expand:0}
-  },
-  OJBK:{
-    name:'佛系送走人', emoji:'🧘',
-    alias:['随缘大师','只要缸还在'],
-    setting:'水绿了？OJBK。鱼跑了？OJBK。停电了？OJBK。没有什么能打扰他的内心平静，包括鱼的死亡。',
-    quote:'鱼生如梦，走了便走了，换桶自来水又是一条好汉。',
-    scores:{money:0,death:2,logic:0,expand:0}
-  },
-  SHIT:{
-    name:'喂食过量的神', emoji:'🍚',
-    alias:['鱼界猪场场长','绿豆汤厨师'],
-    setting:'总觉得鱼饿，一勺一勺往里倒，缸里全是粑粑和剩饭，水质浓稠如粥。他管这叫"爱"，鱼管这叫溺亡。',
-    quote:'看它抢食多开心啊！什么？那是撑得翻肚皮了？',
-    scores:{money:1,death:3,logic:0,expand:1}
-  },
-  PURE:{
-    name:'裸缸原批', emoji:'🪟',
-    alias:['极简主义疯子','玻璃擦拭者'],
-    setting:'缸里除了水和鱼，连颗沙子都没有。一丝多余的东西都是污染，一块造景石都是对纯粹的侵犯。',
-    quote:'造景只会影响我观察鱼鳞的角度，那是亵渎。',
-    scores:{money:3,death:0,logic:3,expand:0}
-  },
-  DIYER:{
-    name:'叙利亚工程师', emoji:'🔧',
-    alias:['破烂王','漏电先锋'],
-    setting:'绝不买成品。外卖盒做过滤，洗衣机管抽水，家里随时像要爆炸。但水质出奇地好，鱼出奇地难死。',
-    quote:'花那钱干啥？我用这废旧塑料瓶改的滤桶不香吗？（滋——被电了一下）',
-    scores:{money:0,death:0,logic:3,expand:2}
-  },
-  RICH:{
-    name:'滤材皇帝', emoji:'👑',
-    alias:['尼特利亲儿子','装备党课代表'],
-    setting:'鱼不重要，器材必须顶配。滤材堆得比人高，家里电表转得像电风扇。没有什么问题是加一件设备解决不了的。',
-    quote:'虽然我还没买鱼，但我这套过滤系统已经能养海豚了。',
-    scores:{money:3,death:0,logic:3,expand:3}
-  },
-  ROCK:{
-    name:'原生老顽固', emoji:'🪨',
-    alias:['石头搬运工','野采特种兵'],
-    setting:'沉迷于捡石头和捞野鱼。看不起一切人工鱼，觉得红绿灯鱼都太俗，觉得人工繁殖是对大自然的背刺。',
-    quote:'这是我从海拔三千米的溪流里人肉背回来的石头，懂不懂它的含金量？',
-    scores:{money:0,death:0,logic:3,expand:1}
-  },
-  MOSS:{
-    name:'莫丝理发师', emoji:'✂️',
-    alias:['草缸文青','黑毛藻宿敌'],
-    setting:'每天拿着镊子在水里做手术。草长歪一毫米都能让他当场崩溃，发现一根黑毛藻相当于发现了家里有贼。',
-    quote:'鱼可以死，草必须绿。这根草上有根藻，我不干净了！',
-    scores:{money:2,death:1,logic:3,expand:1}
-  },
-  MORE:{
-    name:'承重墙杀手', emoji:'🏗️',
-    alias:['扩缸永动机','搬家公司噩梦'],
-    setting:'只要家里还有一块空地，就能再塞一个缸。已经不记得上次看见地板是什么时候了。',
-    quote:'真的，这是最后一个缸，再买我就剁手……诶？这个40方缸真好看。',
-    scores:{money:2,death:1,logic:1,expand:3}
-  },
-  SOS:{
-    name:'试剂盒吞噬者', emoji:'🧪',
-    alias:['滴定狂魔','水质监测仪'],
-    setting:'每天测PH、测氨氮、测硝酸盐。比起看鱼，他更爱看试管变色。没有指标他活不下去，鱼反而次要。',
-    quote:'指标还没调好，现在的鱼缸对我来说就是个毒气室。',
-    scores:{money:2,death:0,logic:3,expand:2}
-  },
-  SLAVE:{
-    name:'龙鱼老奴', emoji:'🙇',
-    alias:['祖宗供养人','卑微饲养员'],
-    setting:'每天换水、控温、切虾、按摩。鱼是主子，他是随从，鱼的表情决定他今天过得好不好。',
-    quote:'主子今天看了我一眼，看来水温很满意。',
-    scores:{money:3,death:0,logic:2,expand:0}
-  },
-  UFO:{
-    name:'睁眼瞎派掌门', emoji:'🌫️',
-    alias:['绿水先知','盲人养鱼'],
-    setting:'缸里绿到反光，啥也看不见。他管这叫"原生古法养生"，鱼死没死他无从得知，但他选择相信。',
-    quote:'只要我看不到它死，它就永远活着。这是薛定谔的鱼。',
-    scores:{money:0,death:2,logic:0,expand:1}
-  },
-  BYE:{
-    name:'抽水带师', emoji:'🪣',
-    alias:['抽水抽干将','厕所常客'],
-    setting:'没钱买过滤，全靠一身力。每天提桶换水，家里地板永远是湿的，邻居以为他在开洗车房。',
-    quote:'养鱼？养鱼不就是练深蹲和提重物吗？',
-    scores:{money:0,death:1,logic:2,expand:2}
-  },
-  HELP:{
-    name:'换水带师的家属', emoji:'😤',
-    alias:['忍辱负重者','随时想砸缸的人'],
-    setting:'自己不养鱼，但每天要帮着捞死鱼、擦地板、交电费。已经记不清上次睡个好觉是什么时候了。',
-    quote:'你和你的鱼，今天必须走一个。',
-    scores:{money:0,death:2,logic:1,expand:0}
-  },
+  reset() {
+    localStorage.removeItem(STORAGE_KEY);
+    return this.init();
+  }
 };
 
-// ===================== 题目 =====================
-// 每题4个选项，每个选项给各维度加分
-// 维度: money(氪金0-3) death(鱼死率0-3) logic(科学理性0-3) expand(扩张欲0-3)
-const QUESTIONS = [
-  {
-    scene:'💰 花钱这件事',
-    text:'鱼缸设备预算超支了，你下一步怎么做？',
-    opts:[
-      {t:'刷卡，进口滤材不能省，贵的才是好的', scores:{money:3,death:0,logic:1,expand:0}},
-      {t:'翻出家里的矿泉水瓶，自己动手改一个', scores:{money:0,death:0,logic:2,expand:0}},
-      {t:'鱼都死得差不多了，买新鱼比买设备便宜', scores:{money:2,death:3,logic:0,expand:0}},
-      {t:'不管了，缸还在就行，设备能用就用', scores:{money:0,death:1,logic:0,expand:0}},
-    ]
-  },
-  {
-    scene:'💀 鱼的生死',
-    text:'今天早上发现缸里漂着一条鱼，你第一反应是？',
-    opts:[
-      {t:'马上打开购鱼APP，看看今天有没有活动', scores:{money:2,death:3,logic:0,expand:1}},
-      {t:'拿出检测仪，先测水质，找到死因再说', scores:{money:1,death:0,logic:3,expand:0}},
-      {t:'捞出来扔掉，叹口气：命薄，不怪我', scores:{money:0,death:3,logic:0,expand:0}},
-      {t:'默默念了一句"阿弥陀佛"，继续摸鱼', scores:{money:0,death:2,logic:0,expand:0}},
-    ]
-  },
-  {
-    scene:'🔬 水质管理',
-    text:'朋友说"绿水养鱼，祖传秘方"，你怎么看？',
-    opts:[
-      {t:'听起来很可疑，拿试剂盒测一下再说', scores:{money:0,death:0,logic:3,expand:0}},
-      {t:'我缸里已经绿得反光了，鱼好像还活着？', scores:{money:0,death:2,logic:0,expand:0}},
-      {t:'祖传的都是精华，马上停用过滤', scores:{money:0,death:2,logic:0,expand:0}},
-      {t:'随便，鱼活着就行，管它绿不绿', scores:{money:0,death:1,logic:0,expand:0}},
-    ]
-  },
-  {
-    scene:'📦 扩缸冲动',
-    text:'家里已经有5个缸了，你在鱼市看到了一个绝美的新款大缸，你会？',
-    opts:[
-      {t:'买！阳台还有地方，再挤挤', scores:{money:2,death:0,logic:0,expand:3}},
-      {t:'拍张照发朋友圈，过过眼瘾就够', scores:{money:0,death:0,logic:0,expand:0}},
-      {t:'买了缸就得买鱼，但买鱼我就得再换水……算了', scores:{money:0,death:0,logic:1,expand:0}},
-      {t:'这个预算够我再买30条鱼，买缸干嘛', scores:{money:2,death:2,logic:0,expand:0}},
-    ]
-  },
-  {
-    scene:'🍽️ 喂食哲学',
-    text:'该喂鱼了，你喂了多少？',
-    opts:[
-      {t:'精确称量0.2克，不多不少，按体重计算', scores:{money:0,death:0,logic:3,expand:0}},
-      {t:'一大勺，看它们抢食好解压', scores:{money:0,death:2,logic:0,expand:0}},
-      {t:'喂了三次，总觉得没吃饱', scores:{money:0,death:3,logic:0,expand:0}},
-      {t:'忘了……上次喂是两天前？', scores:{money:0,death:2,logic:0,expand:0}},
-    ]
-  },
-  {
-    scene:'🎨 造景审美',
-    text:'布置鱼缸时，你更倾向于？',
-    opts:[
-      {t:'裸缸！一根草都是污染，影响我观察鱼鳞', scores:{money:2,death:0,logic:3,expand:0}},
-      {t:'草缸，每株草的位置都要精确到毫米', scores:{money:2,death:0,logic:3,expand:1}},
-      {t:'捡几块石头从河里捞几条野鱼，自然就是美', scores:{money:0,death:0,logic:2,expand:0}},
-      {t:'随便扔点东西进去，鱼自己选吧', scores:{money:0,death:1,logic:0,expand:0}},
-    ]
-  },
-  {
-    scene:'🔧 DIY能力',
-    text:'过滤系统需要升级，你怎么操作？',
-    opts:[
-      {t:'德国进口滤桶，配日本进口滤材，一步到位', scores:{money:3,death:0,logic:2,expand:0}},
-      {t:'外卖盒+废管道，30分钟自制一个，顺便被电一下', scores:{money:0,death:0,logic:2,expand:0}},
-      {t:'多换几次水比装过滤便宜，练练腿力', scores:{money:0,death:1,logic:1,expand:0}},
-      {t:'不装了，绿水不也挺好的吗', scores:{money:0,death:2,logic:0,expand:0}},
-    ]
-  },
-  {
-    scene:'🐟 选鱼偏好',
-    text:'你最想养哪种鱼？',
-    opts:[
-      {t:'超级红龙，贵的就是好的，放财位镇宅', scores:{money:3,death:1,logic:0,expand:0}},
-      {t:'雷龙或其他会跳缸的大型猛鱼', scores:{money:1,death:2,logic:0,expand:1}},
-      {t:'从河里捞的野生鳑鲏，绝不买人工鱼', scores:{money:0,death:0,logic:2,expand:0}},
-      {t:'五毛钱一条的小金鱼，死了再买', scores:{money:0,death:3,logic:0,expand:0}},
-    ]
-  },
-  {
-    scene:'📊 数据控',
-    text:'你多久检测一次水质？',
-    opts:[
-      {t:'每天至少两次，还有自动记录表格', scores:{money:1,death:0,logic:3,expand:0}},
-      {t:'从来不测，用眼睛看，感觉清就是清', scores:{money:0,death:2,logic:0,expand:0}},
-      {t:'测什么测，鱼死了再说', scores:{money:1,death:3,logic:0,expand:0}},
-      {t:'偶尔测一下，但懒得记录', scores:{money:0,death:1,logic:1,expand:0}},
-    ]
-  },
-  {
-    scene:'🏠 生活状态',
-    text:'你家里的鱼缸区域是什么样的？',
-    opts:[
-      {t:'家里走廊全是水管，地板长年是湿的', scores:{money:0,death:1,logic:1,expand:3}},
-      {t:'整洁干净，每条线都走管道，看不见一根电线', scores:{money:3,death:0,logic:3,expand:1}},
-      {t:'乱，但有我自己的逻辑，外卖盒和废管道都有用', scores:{money:0,death:0,logic:2,expand:2}},
-      {t:'一个角落，一个缸，就够了', scores:{money:1,death:0,logic:1,expand:0}},
-    ]
-  },
-  {
-    scene:'😤 家庭关系',
-    text:'家人对你养鱼的态度是？',
-    opts:[
-      {t:'已经学会自动帮我捞死鱼了，默默配合', scores:{money:0,death:2,logic:0,expand:0}},
-      {t:'每次我添新缸都会爆发一次世界大战', scores:{money:1,death:0,logic:0,expand:3}},
-      {t:'我买鱼的钱比家用还多，他们已经放弃说我了', scores:{money:3,death:1,logic:0,expand:0}},
-      {t:'他们不管，我也不管他们，相安无事', scores:{money:0,death:1,logic:0,expand:0}},
-    ]
-  },
-  {
-    scene:'🌊 终极哲学',
-    text:'对你来说，养鱼的意义是什么？',
-    opts:[
-      {t:'花钱买快乐，鱼活多久不重要，买鱼的瞬间最爽', scores:{money:3,death:2,logic:0,expand:1}},
-      {t:'征服和掌控，数据和设备都要在我的掌握之中', scores:{money:2,death:0,logic:3,expand:2}},
-      {t:'看着它们游来游去，啥都不想，最解压', scores:{money:0,death:0,logic:0,expand:0}},
-      {t:'不知道，反正已经停不下来了', scores:{money:1,death:1,logic:0,expand:2}},
-    ]
-  },
-];
-
-// ===================== 状态 =====================
-let cur=0, answers={};
-// 每个类型的累计得分
-let typeScores={};
-
-function resetState(){
-  cur=0; answers={};
-  typeScores={};
-  Object.keys(TYPES).forEach(k=>typeScores[k]=0);
+function uid(prefix='id') { return prefix + '_' + Date.now().toString(36) + Math.random().toString(36).substr(2,4); }
+function fmt(n) {
+  if (!n) return '0';
+  if (n >= 10000) return (n / 10000).toFixed(1).replace(/\.0$/, '') + '万';
+  return n.toString();
+}
+function fmtDate(d) { return d || '-'; }
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+function escapeHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function statusBadge(status) {
+  const map = {'已合作':'badge-success','已确认':'badge-primary','待筛选':'badge-warning','不合作':'badge-danger'};
+  return '<span class="badge ' + (map[status]||'badge-gray') + '">' + status + '</span>';
 }
 
-function calcTypeScores(){
-  // 根据答案计算每种类型的匹配分
-  // 方法：用每道题选项的scores与每种类型的scores做相似度
-  Object.keys(TYPES).forEach(k=>{
-    let total=0;
-    Object.values(answers).forEach(optIdx_q=>{
-      // optIdx_q = {q: question index, opt: option index}
-    });
-    typeScores[k]=0;
-  });
+const PAGE_TITLES = { dashboard:'工作台首页', influencers:'达人库', analysis:'达人分析', campaigns:'投放管理', export:'数据导出' };
+let currentPage = 'dashboard';
 
-  // 重新实现：用余弦相似度
-  // 用户画像向量
-  const userVec={money:0,death:0,logic:0,expand:0};
-  Object.entries(answers).forEach(([qi,oi])=>{
-    const opt=QUESTIONS[qi].opts[oi];
-    Object.entries(opt.scores).forEach(([dim,val])=>{
-      userVec[dim]+=val;
-    });
-  });
-
-  // 与每种类型做点积
-  const dims=['money','death','logic','expand'];
-  Object.entries(TYPES).forEach(([k,t])=>{
-    let dot=0,normT=0,normU=0;
-    dims.forEach(d=>{
-      dot+=userVec[d]*t.scores[d];
-      normT+=t.scores[d]**2;
-      normU+=userVec[d]**2;
-    });
-    const sim = normT===0||normU===0 ? 0 : dot/Math.sqrt(normT)/Math.sqrt(normU);
-    typeScores[k]=sim;
-  });
+function navigateTo(page) {
+  currentPage = page;
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  document.querySelector('.nav-item[data-page="' + page + '"]')?.classList.add('active');
+  document.getElementById('pageTitle').textContent = PAGE_TITLES[page] || '';
+  renderPage();
 }
 
-function getTopType(){
-  return Object.entries(typeScores).sort((a,b)=>b[1]-a[1])[0][0];
-}
-
-// ===================== 首页预览 =====================
-function renderIntroTypes(){
-  const el=document.getElementById('intro-types');
-  Object.entries(TYPES).forEach(([code,t])=>{
-    const d=document.createElement('div');
-    d.className='tp-chip';
-    d.innerHTML=`<div class="tp-chip-emoji">${t.emoji}</div>
-      <div class="tp-chip-code">${code}</div>
-      <div class="tp-chip-name">${t.name}</div>`;
-    d.onclick=()=>openModal(code);
-    el.appendChild(d);
-  });
-}
-renderIntroTypes();
-
-// ===================== 测试逻辑 =====================
-function startQuiz(){
-  resetState();
-  document.getElementById('pg-intro').style.display='none';
-  document.getElementById('pg-quiz').style.display='block';
-  renderQ();
-}
-
-function renderQ(){
-  const q=QUESTIONS[cur];
-  const pct=(cur/QUESTIONS.length*100).toFixed(0);
-  document.getElementById('prog').style.width=pct+'%';
-  document.getElementById('prog-txt').textContent=`第 ${cur+1} 题 / 共 ${QUESTIONS.length} 题`;
-
-  let html=`<div class="q-card">
-    <div class="q-scene">${q.scene}</div>
-    <div class="q-text">${q.text}</div>
-    <div class="opts">`;
-  const labs=['A','B','C','D'];
-  q.opts.forEach((o,i)=>{
-    const sel=answers[cur]===i?'sel':'';
-    html+=`<button class="opt ${sel}" onclick="pickOpt(${i})">
-      <div class="opt-ab">${labs[i]}</div>
-      <div>${o.t}</div>
-    </button>`;
-  });
-  html+=`</div></div>`;
-  document.getElementById('q-area').innerHTML=html;
-
-  document.getElementById('btn-prev').disabled=cur===0;
-  const btnN=document.getElementById('btn-next');
-  if(cur===QUESTIONS.length-1){
-    btnN.textContent='🎯 查看结果';
-    btnN.onclick=showResult;
-  } else {
-    btnN.textContent='下一题 →';
-    btnN.onclick=nextQ;
+function renderPage() {
+  const content = document.getElementById('pageContent');
+  const data = DB.get();
+  document.getElementById('navInfCount').textContent = data.influencers.length;
+  const cooperated = data.influencers.filter(i=>i.status==='已合作').length;
+  document.getElementById('navCmpCount').textContent = cooperated;
+  switch(currentPage) {
+    case 'dashboard': content.innerHTML = renderDashboard(); initDashboard(); break;
+    case 'influencers': content.innerHTML = renderInfluencers(); renderInfTable(); break;
+    case 'analysis': content.innerHTML = renderAnalysis(); break;
+    case 'campaigns': content.innerHTML = renderCampaigns(); break;
+    case 'export': content.innerHTML = renderExport(); break;
   }
-  btnN.disabled=answers[cur]===undefined;
 }
 
-function pickOpt(i){
-  answers[cur]=i;
-  document.getElementById('btn-next').disabled=false;
-  renderQ();
-  setTimeout(()=>{
-    if(cur<QUESTIONS.length-1) nextQ();
-    else showResult();
-  },380);
+function handleGlobalSearch(val) {
+  if (currentPage === 'influencers') {
+    const input = document.getElementById('infSearchInput');
+    if (input) { input.value = val; filterInfluencers(); }
+  } else if (val.trim()) {
+    navigateTo('influencers');
+    setTimeout(() => { const input = document.getElementById('infSearchInput'); if (input) { input.value = val; filterInfluencers(); } }, 100);
+  }
 }
 
-function nextQ(){
-  if(answers[cur]===undefined)return;
-  if(cur<QUESTIONS.length-1){cur++;renderQ();}
+/* ========== Dashboard ========== */
+function renderDashboard() {
+  const data = DB.get();
+  const infs = data.influencers;
+  const total = infs.length;
+  const cooperated = infs.filter(i=>i.status==='已合作');
+  const pending = infs.filter(i=>i.status==='待筛选');
+  const rejected = infs.filter(i=>i.status==='不合作');
+  const confirmed = infs.filter(i=>i.status==='已确认');
+  const totalViews = cooperated.reduce((s,i)=>s+(i.views||0),0);
+  const totalLikes = cooperated.reduce((s,i)=>s+(i.likes||0),0);
+  const totalSaves = cooperated.reduce((s,i)=>s+(i.saves||0),0);
+  const totalCost = cooperated.reduce((s,i)=>s+(i.cost||0),0);
+  const categories = {};
+  infs.forEach(i => { const c = i.category || '未分类'; categories[c] = (categories[c]||0)+1; });
+  const statuses = {'已合作':cooperated.length,'待筛选':pending.length,'已确认':confirmed.length,'不合作':rejected.length};
+
+  return `
+    <div class="banner">
+      <div class="banner-icon">\u26a0\ufe0f</div>
+      <div class="banner-text">${escapeHtml(TABLE_NOTE)}</div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:var(--primary-light)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+        <div class="stat-card-label">达人总数</div>
+        <div class="stat-card-value">${total}</div>
+        <div class="stat-card-sub">已合作${cooperated.length} / 待筛选${pending.length} / 不合作${rejected.length}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:var(--success-light)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div class="stat-card-label">总曝光量</div>
+        <div class="stat-card-value">${fmt(totalViews)}</div>
+        <div class="stat-card-sub">7月合作达人笔记播放量</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:var(--teal-light)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <div class="stat-card-label">总互动量</div>
+        <div class="stat-card-value">${fmt(totalLikes + totalSaves)}</div>
+        <div class="stat-card-sub">点赞${fmt(totalLikes)} + 收藏${fmt(totalSaves)}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:var(--warning-light)"><svg viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div class="stat-card-label">总投放成本</div>
+        <div class="stat-card-value">\u00a5${fmt(totalCost)}</div>
+        <div class="stat-card-sub">${cooperated.length}位达人合作费用</div>
+      </div>
+    </div>
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-card-header">达人分类分布</div>
+        <div class="chart-card-body"><canvas id="chartCategory"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-header">合作状态分布</div>
+        <div class="chart-card-body"><canvas id="chartStatus"></canvas></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">7月合作达人效果 TOP 10</div></div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>排名</th><th>达人名称</th><th>分类</th><th>粉丝量</th><th>播放量</th><th>点赞</th><th>收藏</th><th>总互动</th><th>成本</th><th>报备类型</th></tr></thead>
+          <tbody>
+            ${cooperated.sort((a,b)=>(b.views||0)-(a.views||0)).slice(0,10).map((inf,idx) => `
+              <tr>
+                <td><b>${idx+1}</b></td>
+                <td><a href="${inf.homepageUrl||'#'}" target="_blank">${escapeHtml(inf.name)}</a></td>
+                <td>${escapeHtml(inf.category||'-')}</td>
+                <td>${inf.followersWan?inf.followersWan+'万':'-'}</td>
+                <td>${fmt(inf.views)}</td>
+                <td>${fmt(inf.likes)}</td>
+                <td>${fmt(inf.saves)}</td>
+                <td><b>${fmt(inf.totalEngagement)}</b></td>
+                <td>${inf.cost?'\u00a5'+inf.cost:'-'}</td>
+                <td>${inf.coopType?statusBadge(inf.coopType):'-'}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
 }
-function prevQ(){
-  if(cur>0){cur--;renderQ();}
+
+function initDashboard() {
+  const data = DB.get();
+  const infs = data.influencers;
+  const categories = {};
+  infs.forEach(i => { const c = i.category || '未分类'; categories[c] = (categories[c]||0)+1; });
+  const catLabels = Object.keys(categories);
+  const catValues = Object.values(categories);
+  
+  const ctx1 = document.getElementById('chartCategory');
+  if (ctx1) new Chart(ctx1, {type:'bar',data:{labels:catLabels,datasets:[{data:catValues,backgroundColor:'#4F6FED',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}}}});
+  
+  const statuses = {'已合作':0,'待筛选':0,'已确认':0,'不合作':0};
+  infs.forEach(i => { if(statuses[i.status]!==undefined) statuses[i.status]++; });
+  const ctx2 = document.getElementById('chartStatus');
+  if (ctx2) new Chart(ctx2, {type:'doughnut',data:{labels:Object.keys(statuses),datasets:[{data:Object.values(statuses),backgroundColor:['#00B894','#F59E0B','#4F6FED','#EF4444'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right'}}}});
 }
 
-// ===================== 结果 =====================
-function showResult(){
-  calcTypeScores();
-  const code=getTopType();
-  const d=TYPES[code];
+/* ========== Influencers ========== */
+let infPage = 1, infPageSize = 20, infFilter = {keyword:'',status:'',category:'',coopType:''};
 
-  document.getElementById('pg-quiz').style.display='none';
-  document.getElementById('pg-result').style.display='block';
-  window.scrollTo(0,0);
+function renderInfluencers() {
+  const data = DB.get();
+  const categories = [...new Set(data.influencers.map(i=>i.category).filter(Boolean))];
+  return `
+    <div class="banner">
+      <div class="banner-icon">\u26a0\ufe0f</div>
+      <div class="banner-text">${escapeHtml(TABLE_NOTE)}</div>
+    </div>
+    <div class="filter-bar">
+      <input type="text" id="infSearchInput" placeholder="搜索达人名称..." oninput="filterInfluencers()" style="width:200px">
+      <select id="infFilterStatus" onchange="filterInfluencers()">
+        <option value="">全部状态</option>
+        <option value="已合作">已合作</option>
+        <option value="待筛选">待筛选</option>
+        <option value="已确认">已确认</option>
+        <option value="不合作">不合作</option>
+      </select>
+      <select id="infFilterCategory" onchange="filterInfluencers()">
+        <option value="">全部分类</option>
+        ${categories.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('')}
+      </select>
+      <select id="infFilterCoop" onchange="filterInfluencers()">
+        <option value="">报备/水下</option>
+        <option value="报备">报备</option>
+        <option value="水下">水下</option>
+      </select>
+      <button class="btn btn-primary" onclick="openInfModal()">+ 添加达人</button>
+      <button class="btn btn-outline" onclick="openBulkPasteModal()">批量粘贴</button>
+      <button class="btn btn-outline" onclick="importCSVFile()">导入CSV</button>
+      <input type="file" id="csvFileInput" accept=".csv" style="display:none" onchange="handleCSVUpload(event)">
+      <button class="btn btn-success" onclick="syncFromTencentDocs()">从腾讯文档同步</button>
+      <button class="btn btn-outline" onclick="resetData()">重置数据</button>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">达人列表 <span id="infCount" style="font-weight:400;color:var(--text-tertiary);font-size:13px"></span></div>
+      </div>
+      <div class="table-wrap" id="infTableWrap"></div>
+      <div class="pagination" id="infPagination"></div>
+    </div>
+  `;
+}
 
-  document.getElementById('r-emoji').textContent=d.emoji;
-  document.getElementById('r-code').textContent=code;
-  document.getElementById('r-name').textContent=d.name;
-  document.getElementById('r-alias').textContent=d.alias.join(' / ');
-  document.getElementById('r-quote').innerHTML=`<em class="qs">「</em> ${d.quote} <em class="qs">」</em>`;
+function filterInfluencers() {
+  infFilter.keyword = (document.getElementById('infSearchInput')?.value||'').trim();
+  infFilter.status = document.getElementById('infFilterStatus')?.value||'';
+  infFilter.category = document.getElementById('infFilterCategory')?.value||'';
+  infFilter.coopType = document.getElementById('infFilterCoop')?.value||'';
+  infPage = 1;
+  renderInfTable();
+}
 
-  // 别名标签
-  const aTags=document.getElementById('r-alias-tags');
-  aTags.innerHTML='';
-  d.alias.forEach(a=>{
-    const s=document.createElement('span');
-    s.className='alias-tag'; s.textContent=a;
-    aTags.appendChild(s);
+function renderInfTable() {
+  const data = DB.get();
+  let filtered = data.influencers;
+  if (infFilter.keyword) filtered = filtered.filter(i => i.name.includes(infFilter.keyword) || (i.category||'').includes(infFilter.keyword) || (i.highlights||'').includes(infFilter.keyword));
+  if (infFilter.status) filtered = filtered.filter(i => i.status === infFilter.status);
+  if (infFilter.category) filtered = filtered.filter(i => i.category === infFilter.category);
+  if (infFilter.coopType) filtered = filtered.filter(i => (i.coopType||'').includes(infFilter.coopType));
+  
+  document.getElementById('infCount').textContent = '(' + filtered.length + '条)';
+  const totalPages = Math.ceil(filtered.length / infPageSize);
+  if (infPage > totalPages) infPage = 1;
+  const start = (infPage-1)*infPageSize;
+  const pageData = filtered.slice(start, start+infPageSize);
+  
+  const wrap = document.getElementById('infTableWrap');
+  if (pageData.length === 0) {
+    wrap.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><p>没有匹配的达人</p></div>';
+  } else {
+    wrap.innerHTML = '<table class="data-table"><thead><tr><th>达人名称</th><th>粉丝量</th><th>状态</th><th>报备/水下</th><th>分类</th><th>联系人</th><th>联系方式</th><th>亮点</th><th>最终价格</th><th>成本</th><th>播放量</th><th>点赞</th><th>收藏</th><th>总互动</th><th>同步平台</th><th>操作</th></tr></thead><tbody>' +
+      pageData.map(inf => `
+        <tr>
+          <td><a href="${inf.homepageUrl||'#'}" target="_blank" title="${escapeHtml(inf.homepageUrl||'')}">${escapeHtml(inf.name)}</a></td>
+          <td>${inf.followersWan?inf.followersWan+'万':'-'}</td>
+          <td>${statusBadge(inf.status)}</td>
+          <td>${inf.coopType?'<span class="badge '+(inf.coopType.includes('报备')?'badge-primary':'badge-warning')+'">'+escapeHtml(inf.coopType)+'</span>':'-'}</td>
+          <td>${escapeHtml(inf.category||'-')}</td>
+          <td>${escapeHtml(inf.contactPerson||'-')}</td>
+          <td>${escapeHtml(inf.contactInfo||'-')}</td>
+          <td style="max-width:150px" title="${escapeHtml(inf.highlights||'')}">${escapeHtml(inf.highlights||'-')}</td>
+          <td title="${escapeHtml(inf.finalPrice||'')}" style="max-width:120px">${escapeHtml((inf.finalPrice||'-').substring(0,20))}${inf.finalPrice&&inf.finalPrice.length>20?'...':''}</td>
+          <td>${inf.cost?'\u00a5'+inf.cost:'-'}</td>
+          <td>${fmt(inf.views)}</td>
+          <td>${fmt(inf.likes)}</td>
+          <td>${fmt(inf.saves)}</td>
+          <td><b>${fmt(inf.totalEngagement)}</b></td>
+          <td>${escapeHtml(inf.syncPlatform||'-')}</td>
+          <td><button class="btn btn-outline" style="padding:4px 10px;font-size:12px" onclick="openInfModal('${inf.id}')">编辑</button> <button class="btn btn-danger" style="padding:4px 10px;font-size:12px" onclick="deleteInf('${inf.id}')">删除</button></td>
+        </tr>
+      `).join('') + '</tbody></table>';
+  }
+  
+  const pag = document.getElementById('infPagination');
+  if (totalPages > 1) {
+    pag.innerHTML = '<button '+(infPage<=1?'disabled':'')+' onclick="infPage--;renderInfTable()">&laquo;</button>' +
+      Array.from({length:totalPages},(_,i) => '<button class="'+(i+1===infPage?'active':'')+'" onclick="infPage='+(i+1)+';renderInfTable()">'+(i+1)+'</button>').join('') +
+      '<button '+(infPage>=totalPages?'disabled':'')+' onclick="infPage++;renderInfTable()">&raquo;</button>';
+  } else {
+    pag.innerHTML = '';
+  }
+}
+
+function openInfModal(id) {
+  const data = DB.get();
+  const inf = id ? data.influencers.find(i=>i.id===id) : {};
+  document.getElementById('modalContent').innerHTML = `
+    <div class="modal-header"><div class="modal-title">${id?'编辑达人':'添加达人'}</div><div class="modal-close" onclick="closeModal()">&times;</div></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label>博主名称 *</label><input id="f_name" value="${escapeHtml(inf.name||'')}"></div>
+        <div class="form-group"><label>主页链接</label><input id="f_url" value="${escapeHtml(inf.homepageUrl||'')}"></div>
+        <div class="form-group"><label>小红书粉丝量(万)</label><input id="f_followers" type="number" step="0.01" value="${inf.followersWan||''}"></div>
+        <div class="form-group"><label>状态</label><select id="f_status"><option value="待筛选" ${inf.status==='待筛选'?'selected':''}>待筛选</option><option value="已确认" ${inf.status==='已确认'?'selected':''}>已确认</option><option value="已合作" ${inf.status==='已合作'?'selected':''}>已合作</option><option value="不合作" ${inf.status==='不合作'?'selected':''}>不合作</option></select></div>
+        <div class="form-group"><label>报备/水下</label><select id="f_coop"><option value="" ${!inf.coopType?'selected':''}>-</option><option value="报备" ${inf.coopType==='报备'?'selected':''}>报备</option><option value="水下" ${inf.coopType==='水下'?'selected':''}>水下</option><option value="水下+报备" ${inf.coopType==='水下+报备'?'selected':''}>水下+报备</option></select></div>
+        <div class="form-group"><label>分类</label><input id="f_category" value="${escapeHtml(inf.category||'')}"></div>
+        <div class="form-group"><label>联系人</label><input id="f_contactP" value="${escapeHtml(inf.contactPerson||'')}"></div>
+        <div class="form-group"><label>联系方式</label><input id="f_contactI" value="${escapeHtml(inf.contactInfo||'')}"></div>
+        <div class="form-group" style="grid-column:1/-1"><label>亮点</label><input id="f_highlights" value="${escapeHtml(inf.highlights||'')}"></div>
+        <div class="form-group"><label>最终价格</label><input id="f_price" value="${escapeHtml(inf.finalPrice||'')}"></div>
+        <div class="form-group"><label>成本</label><input id="f_cost" type="number" value="${inf.cost||''}"></div>
+        <div class="form-group"><label>播放量</label><input id="f_views" type="number" value="${inf.views||''}"></div>
+        <div class="form-group"><label>点赞</label><input id="f_likes" type="number" value="${inf.likes||''}"></div>
+        <div class="form-group"><label>收藏</label><input id="f_saves" type="number" value="${inf.saves||''}"></div>
+        <div class="form-group"><label>分享</label><input id="f_shares" type="number" value="${inf.shares||''}"></div>
+        <div class="form-group"><label>发布日期</label><input id="f_pdate" value="${escapeHtml(inf.publishDate||'')}"></div>
+        <div class="form-group"><label>同步平台</label><input id="f_sync" value="${escapeHtml(inf.syncPlatform||'')}"></div>
+        <div class="form-group"><label>兑换码</label><input id="f_code" value="${escapeHtml(inf.redemptionCode||'')}"></div>
+        <div class="form-group" style="grid-column:1/-1"><label>发布链接1</label><input id="f_link1" value="${escapeHtml(inf.publishLink1||'')}"></div>
+        <div class="form-group" style="grid-column:1/-1"><label>发布链接2</label><input id="f_link2" value="${escapeHtml(inf.publishLink2||'')}"></div>
+        <div class="form-group" style="grid-column:1/-1"><label>备注</label><textarea id="f_notes">${escapeHtml(inf.notes||'')}</textarea></div>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:20px">
+        <button class="btn btn-primary" onclick="saveInf('${id||''}')">保存</button>
+        <button class="btn btn-outline" onclick="closeModal()">取消</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function saveInf(id) {
+  const data = DB.get();
+  const getVal = (id) => document.getElementById(id)?.value?.trim() || '';
+  const followersWan = parseFloat(getVal('f_followers'))||0;
+  const newInf = {
+    name: getVal('f_name'), homepageUrl: getVal('f_url'),
+    followersWan: followersWan, followers: Math.round(followersWan*10000),
+    status: getVal('f_status'), coopType: getVal('f_coop'), category: getVal('f_category'),
+    contactPerson: getVal('f_contactP'), contactInfo: getVal('f_contactI'),
+    highlights: getVal('f_highlights'), finalPrice: getVal('f_price'),
+    cost: parseInt(getVal('f_cost'))||0, views: parseInt(getVal('f_views'))||0,
+    likes: parseInt(getVal('f_likes'))||0, saves: parseInt(getVal('f_saves'))||0,
+    shares: parseInt(getVal('f_shares'))||0, publishDate: getVal('f_pdate'),
+    syncPlatform: getVal('f_sync'), redemptionCode: getVal('f_code'),
+    publishLink1: getVal('f_link1'), publishLink2: getVal('f_link2'),
+    notes: getVal('f_notes'),
+    totalEngagement: (parseInt(getVal('f_views'))||0)+(parseInt(getVal('f_likes'))||0)+(parseInt(getVal('f_saves'))||0)
+  };
+  if (!newInf.name) { showToast('请填写博主名称'); return; }
+  if (id) {
+    const idx = data.influencers.findIndex(i=>i.id===id);
+    if (idx>-1) data.influencers[idx] = {...data.influencers[idx], ...newInf};
+  } else {
+    newInf.id = uid('inf');
+    newInf.source = '手动添加';
+    data.influencers.push(newInf);
+  }
+  DB.save(data);
+  closeModal();
+  showToast(id?'更新成功':'添加成功');
+  renderInfTable();
+  document.getElementById('navInfCount').textContent = data.influencers.length;
+}
+
+function deleteInf(id) {
+  if (!confirm('确认删除这条达人记录？')) return;
+  const data = DB.get();
+  data.influencers = data.influencers.filter(i=>i.id!==id);
+  DB.save(data);
+  showToast('删除成功');
+  renderInfTable();
+  document.getElementById('navInfCount').textContent = data.influencers.length;
+}
+
+function resetData() {
+  if (!confirm('重置将恢复到从腾讯文档导入的初始数据，所有手动修改将丢失。确认？')) return;
+  DB.reset();
+  showToast('数据已重置');
+  renderPage();
+}
+
+/* ========== Analysis ========== */
+function renderAnalysis() {
+  return `
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-header"><div class="card-title">达人分析报告</div></div>
+      <div class="card-body">
+        <p style="color:var(--text-secondary);margin-bottom:12px">粘贴达人主页链接，生成完整分析报告（账号数据 / 粉丝画像 / 爆款标签 / 投放复盘 / 风险提示）</p>
+        <input class="analysis-input" id="analysisUrl" placeholder="粘贴小红书达人主页链接，如 https://www.xiaohongshu.com/user/profile/xxxxxx" onfocus="this.select()">
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <button class="btn btn-primary" onclick="generateReport()">生成报告</button>
+          <button class="btn btn-outline" onclick="loadExistingInf()">从达人库选择</button>
+        </div>
+      </div>
+    </div>
+    <div id="reportContainer">
+      <div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><p>粘贴链接或从达人库选择，生成分析报告</p></div>
+    </div>
+  `;
+}
+
+function generateReport() {
+  const url = document.getElementById('analysisUrl').value.trim();
+  if (!url) { showToast('请粘贴达人主页链接'); return; }
+  const data = DB.get();
+  // Try to match existing influencer
+  let inf = data.influencers.find(i => i.homepageUrl && (i.homepageUrl.includes(url) || url.includes(i.homepageUrl) || (i.name && url.includes(i.name))));
+  let reportData;
+  if (inf) {
+    reportData = inf;
+  } else {
+    // Generate a template report from URL
+    reportData = { name: '新达人', homepageUrl: url, status: '待分析', followersWan: 0, category: '', highlights: '', views: 0, likes: 0, saves: 0, cost: 0, finalPrice: '', notes: '' };
+  }
+  renderReport(reportData);
+}
+
+function loadExistingInf() {
+  const data = DB.get();
+  const options = data.influencers.map((inf,i) => `<option value="${inf.id}">${escapeHtml(inf.name)} (${inf.status})</option>`).join('');
+  document.getElementById('modalContent').innerHTML = `
+    <div class="modal-header"><div class="modal-title">从达人库选择</div><div class="modal-close" onclick="closeModal()">&times;</div></div>
+    <div class="modal-body">
+      <select id="selInf" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;margin-bottom:16px">${options}</select>
+      <button class="btn btn-primary" onclick="selectInfForReport()">确认</button>
+    </div>
+  `;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function selectInfForReport() {
+  const id = document.getElementById('selInf').value;
+  const data = DB.get();
+  const inf = data.influencers.find(i=>i.id===id);
+  closeModal();
+  if (inf) renderReport(inf);
+}
+
+function renderReport(inf) {
+  const engagementRate = inf.followers > 0 ? ((inf.totalEngagement||0) / inf.followers * 100).toFixed(2) : '0';
+  const cpe = inf.cost > 0 && inf.totalEngagement > 0 ? (inf.cost / inf.totalEngagement).toFixed(1) : '-';
+  const cpv = inf.cost > 0 && inf.views > 0 ? (inf.cost / inf.views).toFixed(2) : '-';
+  
+  document.getElementById('reportContainer').innerHTML = `
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-header"><div class="card-title">${escapeHtml(inf.name||'未命名达人')} - 分析报告</div><div>${statusBadge(inf.status)}</div></div>
+      <div class="card-body">
+        <div class="report-section">
+          <div class="report-section-title">1. 账号基础数据</div>
+          <div class="report-grid">
+            <div class="report-item"><div class="report-item-label">粉丝量</div><div class="report-item-value">${inf.followersWan?inf.followersWan+'万':'-'}</div></div>
+            <div class="report-item"><div class="report-item-label">主页链接</div><div class="report-item-value" style="font-size:12px"><a href="${inf.homepageUrl||'#'}" target="_blank">${inf.homepageUrl?'点击访问' : '-'}</a></div></div>
+            <div class="report-item"><div class="report-item-label">分类/垂类</div><div class="report-item-value">${escapeHtml(inf.category||'-')}</div></div>
+            <div class="report-item"><div class="report-item-label">报备/水下</div><div class="report-item-value">${inf.coopType||'-'}</div></div>
+            <div class="report-item"><div class="report-item-label">联系人</div><div class="report-item-value">${escapeHtml(inf.contactPerson||'-')}</div></div>
+            <div class="report-item"><div class="report-item-label">联系方式</div><div class="report-item-value" style="font-size:12px">${escapeHtml(inf.contactInfo||'-')}</div></div>
+            <div class="report-item"><div class="report-item-label">合作状态</div><div class="report-item-value">${statusBadge(inf.status)}</div></div>
+            <div class="report-item"><div class="report-item-label">同步平台</div><div class="report-item-value">${escapeHtml(inf.syncPlatform||'-')}</div></div>
+            <div class="report-item"><div class="report-item-label">有无群聊</div><div class="report-item-value">${inf.hasGroupChat||'-'}</div></div>
+          </div>
+        </div>
+        <div class="report-section">
+          <div class="report-section-title">2. 达人亮点 & 爆款标签</div>
+          <div class="report-grid">
+            <div class="report-item" style="grid-column:1/-1"><div class="report-item-label">达人亮点</div><div class="report-item-value" style="font-size:14px;font-weight:400">${escapeHtml(inf.highlights||'暂无数据')}</div></div>
+            <div class="report-item" style="grid-column:1/-1"><div class="report-item-label">最终价格</div><div class="report-item-value" style="font-size:13px;font-weight:400;white-space:pre-wrap">${escapeHtml(inf.finalPrice||'暂无数据')}</div></div>
+          </div>
+        </div>
+        <div class="report-section">
+          <div class="report-section-title">3. 过往投放效果复盘</div>
+          <div class="report-grid">
+            <div class="report-item"><div class="report-item-label">播放量</div><div class="report-item-value">${fmt(inf.views)}</div></div>
+            <div class="report-item"><div class="report-item-label">点赞</div><div class="report-item-value">${fmt(inf.likes)}</div></div>
+            <div class="report-item"><div class="report-item-label">收藏</div><div class="report-item-value">${fmt(inf.saves)}</div></div>
+            <div class="report-item"><div class="report-item-label">分享</div><div class="report-item-value">${fmt(inf.shares)}</div></div>
+            <div class="report-item"><div class="report-item-label">总互动</div><div class="report-item-value">${fmt(inf.totalEngagement)}</div></div>
+            <div class="report-item"><div class="report-item-label">互动率</div><div class="report-item-value">${engagementRate}%</div></div>
+            <div class="report-item"><div class="report-item-label">成本(CPE)</div><div class="report-item-value">${cpe!=='-'?'\u00a5'+cpe:'-'}</div></div>
+            <div class="report-item"><div class="report-item-label">CPV</div><div class="report-item-value">${cpv!=='-'?'\u00a5'+cpv:'-'}</div></div>
+            <div class="report-item"><div class="report-item-label">投放成本</div><div class="report-item-value">${inf.cost?'\u00a5'+inf.cost:'-'}</div></div>
+          </div>
+          ${inf.publishLink1?`<div style="margin-top:12px"><a href="${inf.publishLink1}" target="_blank" style="font-size:13px">查看发布链接1 \u2192</a></div>`:''}
+          ${inf.publishLink2?`<div style="margin-top:4px"><a href="${inf.publishLink2}" target="_blank" style="font-size:13px">查看发布链接2 \u2192</a></div>`:''}
+        </div>
+        <div class="report-section">
+          <div class="report-section-title">4. 风险点避雷提示</div>
+          <div class="report-item" style="grid-column:1/-1"><div class="report-item-label">备注/风险提示</div><div class="report-item-value" style="font-size:14px;font-weight:400">${escapeHtml(inf.notes||'暂无风险记录')}</div></div>
+        </div>
+        <div class="report-section">
+          <div class="report-section-title">5. 时间线 & 内容</div>
+          <div class="report-item" style="grid-column:1/-1"><div class="report-item-label">排期时间</div><div class="report-item-value" style="font-size:13px;font-weight:400;white-space:pre-wrap">${escapeHtml(inf.timeline||'-')}</div></div>
+          <div class="report-item" style="grid-column:1/-1"><div class="report-item-label">成稿内容</div><div class="report-item-value" style="font-size:13px;font-weight:400;white-space:pre-wrap">${escapeHtml(inf.finalContent||'-')}</div></div>
+          <div class="report-item" style="grid-column:1/-1"><div class="report-item-label">兑换码</div><div class="report-item-value" style="font-size:13px;font-weight:400">${escapeHtml(inf.redemptionCode||'-')}</div></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ========== Campaigns ========== */
+function renderCampaigns() {
+  const data = DB.get();
+  const cooperated = data.influencers.filter(i=>i.status==='已合作');
+  return `
+    <div class="stat-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="stat-card"><div class="stat-card-label">合作达人数</div><div class="stat-card-value">${cooperated.length}</div></div>
+      <div class="stat-card"><div class="stat-card-label">总投放成本</div><div class="stat-card-value">\u00a5${fmt(cooperated.reduce((s,i)=>s+(i.cost||0),0))}</div></div>
+      <div class="stat-card"><div class="stat-card-label">总曝光量</div><div class="stat-card-value">${fmt(cooperated.reduce((s,i)=>s+(i.views||0),0))}</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">7月投放明细</div></div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>达人名称</th><th>报备/水下</th><th>分类</th><th>最终价格</th><th>成本</th><th>发布日期</th><th>同步平台</th><th>兑换码</th><th>播放量</th><th>点赞</th><th>收藏</th><th>总互动</th><th>发布链接</th></tr></thead>
+          <tbody>
+            ${cooperated.map(inf => `
+              <tr>
+                <td><a href="${inf.homepageUrl||'#'}" target="_blank">${escapeHtml(inf.name)}</a></td>
+                <td>${inf.coopType?'<span class="badge '+(inf.coopType.includes('报备')?'badge-primary':'badge-warning')+'">'+escapeHtml(inf.coopType)+'</span>':'-'}</td>
+                <td>${escapeHtml(inf.category||'-')}</td>
+                <td title="${escapeHtml(inf.finalPrice||'')}" style="max-width:120px">${escapeHtml((inf.finalPrice||'-').substring(0,15))}${inf.finalPrice&&inf.finalPrice.length>15?'...':''}</td>
+                <td>${inf.cost?'\u00a5'+inf.cost:'-'}</td>
+                <td>${escapeHtml(inf.publishDate||'-')}</td>
+                <td>${escapeHtml(inf.syncPlatform||'-')}</td>
+                <td>${escapeHtml(inf.redemptionCode||'-')}</td>
+                <td>${fmt(inf.views)}</td>
+                <td>${fmt(inf.likes)}</td>
+                <td>${fmt(inf.saves)}</td>
+                <td><b>${fmt(inf.totalEngagement)}</b></td>
+                <td>${inf.publishLink1?'<a href="'+inf.publishLink1+'" target="_blank" style="font-size:12px">链接1</a>':''} ${inf.publishLink2?'<a href="'+inf.publishLink2+'" target="_blank" style="font-size:12px">链接2</a>':''}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+/* ========== Export ========== */
+function renderExport() {
+  return `
+    <div class="card" style="max-width:600px">
+      <div class="card-header"><div class="card-title">数据导出</div></div>
+      <div class="card-body">
+        <p style="color:var(--text-secondary);margin-bottom:20px">导出达人数据为CSV格式，可直接用Excel打开</p>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <button class="btn btn-primary" onclick="exportCSV('all')" style="justify-content:center;padding:12px">导出全部达人 (${DB.get().influencers.length}条)</button>
+          <button class="btn btn-success" onclick="exportCSV('已合作')" style="justify-content:center;padding:12px">导出已合作达人</button>
+          <button class="btn btn-outline" onclick="exportCSV('待筛选')" style="justify-content:center;padding:12px">导出待筛选达人</button>
+          <hr style="border:none;border-top:1px solid var(--border);margin:8px 0">
+          <button class="btn btn-outline" onclick="exportJSON()" style="justify-content:center;padding:12px">导出完整JSON备份</button>
+          <button class="btn btn-outline" onclick="resetData()" style="justify-content:center;padding:12px">重置为初始数据</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function exportCSV(status) {
+  const data = DB.get();
+  let infs = data.influencers;
+  if (status !== 'all') infs = infs.filter(i=>i.status===status);
+  const headers = ['博主名称','主页链接','小红书粉丝量(万)','状态','报备/水下','分类','联系人','联系方式','亮点','有无群聊','时间','成稿内容','最终价格','蒲公英下单价格','成本','达人返点','达人已返点','发布日期','同步平台','兑换码','发布链接1','发布链接2','播放量','点赞','收藏','总互动','分享','备注','来源'];
+  const fields = ['name','homepageUrl','followersWan','status','coopType','category','contactPerson','contactInfo','highlights','hasGroupChat','timeline','finalContent','finalPrice','pgyPrice','cost','rebate','rebateDone','publishDate','syncPlatform','redemptionCode','publishLink1','publishLink2','views','likes','saves','totalEngagement','shares','notes','source'];
+  let csv = headers.join(',') + '\n';
+  infs.forEach(inf => {
+    csv += fields.map(f => {
+      let v = inf[f] || '';
+      v = String(v).replace(/"/g,'""').replace(/\n/g,' ');
+      return /[",\n]/.test(v) ? '"' + v + '"' : v;
+    }).join(',') + '\n';
   });
+  const blob = new Blob(['\uFEFF' + csv], {type:'text/csv;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'respal_' + (status==='all'?'all':status) + '_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click(); URL.revokeObjectURL(url);
+  showToast('导出成功: ' + infs.length + '条');
+}
 
-  document.getElementById('r-setting').textContent=d.setting;
-  document.getElementById('r-qbox').innerHTML=`🗣 核心语录：<em>"${d.quote}"</em>`;
+function exportJSON() {
+  const data = DB.get();
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'respal_workbench_backup_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click(); URL.revokeObjectURL(url);
+  showToast('JSON备份已导出');
+}
 
-  // 匹配度排名（前8名）
-  const sorted=Object.entries(typeScores)
-    .sort((a,b)=>b[1]-a[1])
-    .slice(0,8);
-  const maxScore=sorted[0][1]||1;
-  const barColors=['#00d4ff','#8b5cf6','#10b981','#f59e0b','#ef4444','#ec4899','#64748b','#94a3b8'];
-  let mHtml='';
-  sorted.forEach(([k,v],i)=>{
-    const pct=Math.round(v/maxScore*100);
-    mHtml+=`<div class="match-row">
-      <div class="match-label">${TYPES[k].emoji} ${k}</div>
-      <div class="match-track"><div class="match-fill" style="width:0%;background:${barColors[i]}" data-pct="${pct}%"></div></div>
-      <div class="match-pct">${pct}%</div>
-    </div>`;
+function closeModal() { document.getElementById('modalOverlay').classList.remove('show'); }
+
+/* ========== Bulk Paste ========== */
+function openBulkPasteModal() {
+  document.getElementById('modalContent').innerHTML = `
+    <div class="modal-header"><div class="modal-title">批量粘贴达人数据</div><div class="modal-close" onclick="closeModal()">&times;</div></div>
+    <div class="modal-body">
+      <p style="color:var(--text-secondary);margin-bottom:12px">从腾讯文档或Excel复制达人数据行，粘贴到下方文本框。<br>支持Tab分隔（Excel直接复制）或逗号分隔。列顺序：<br><b>博主名称 | 主页链接 | 粉丝量(万) | 报备/水下 | 分类 | 联系人 | 联系方式 | 亮点</b></p>
+      <textarea id="bulkPasteArea" style="width:100%;height:200px;padding:12px;border:1px solid var(--border);border-radius:8px;font-family:monospace;font-size:13px" placeholder="胖胖的科研笔记	https://xhslink.com/xxx	0.4	水下	研究生	袁梦	trymybest0721	数据好爆文多
+是Dr.可达吖	https://xhslink.com/yyy	0.8	报备	审稿人	袁梦	QiS_1208	合作笔记数据好"></textarea>
+      <div style="display:flex;gap:12px;margin-top:16px">
+        <button class="btn btn-primary" onclick="processBulkPaste()">解析并导入</button>
+        <button class="btn btn-outline" onclick="closeModal()">取消</button>
+      </div>
+      <div id="bulkResult" style="margin-top:12px"></div>
+    </div>
+  `;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function processBulkPaste() {
+  const text = document.getElementById('bulkPasteArea').value.trim();
+  if (!text) { showToast('请先粘贴数据'); return; }
+  const lines = text.split(/\n/).filter(l => l.trim());
+  const data = DB.get();
+  let added = 0, skipped = 0;
+  const existingNames = new Set(data.influencers.map(i => i.name));
+
+  lines.forEach(line => {
+    const parts = line.split(/\t|,/).map(p => p.trim());
+    if (parts.length < 1 || !parts[0]) { skipped++; return; }
+    const name = parts[0];
+    if (existingNames.has(name)) { skipped++; return; }
+    
+    const followersWan = parseFloat(parts[2]) || 0;
+    const newInf = {
+      id: uid('inf'), name: name,
+      homepageUrl: parts[1] || '', followersWan: followersWan,
+      followers: Math.round(followersWan * 10000),
+      coopType: parts[3] || '', category: parts[4] || '',
+      contactPerson: parts[5] || '', contactInfo: parts[6] || '',
+      highlights: parts[7] || '', status: '待筛选',
+      views: 0, likes: 0, saves: 0, shares: 0, cost: 0,
+      totalEngagement: 0, source: '批量粘贴', notes: ''
+    };
+    data.influencers.push(newInf);
+    existingNames.add(name);
+    added++;
   });
-  document.getElementById('r-match').innerHTML=mHtml;
-  setTimeout(()=>{
-    document.querySelectorAll('.match-fill').forEach(el=>{
-      el.style.width=el.dataset.pct;
-    });
-  },120);
-
-  // 全部类型
-  const allEl=document.getElementById('r-all');
-  allEl.innerHTML='';
-  Object.entries(TYPES).forEach(([k,t])=>{
-    const c=document.createElement('div');
-    c.className='ac'+(k===code?' mine':'');
-    c.innerHTML=`<div class="ac-emoji">${t.emoji}</div>
-      <div class="ac-code">${k}</div>
-      <div class="ac-name">${t.name}</div>`;
-    c.onclick=()=>openModal(k);
-    allEl.appendChild(c);
-  });
+  
+  DB.save(data);
+  document.getElementById('bulkResult').innerHTML = '<div style="color:var(--success);padding:8px 0">\\u2705 导入成功 ' + added + ' 条，跳过 ' + skipped + ' 条（空行或重复）</div>';
+  showToast('导入 ' + added + ' 条达人');
+  document.getElementById('navInfCount').textContent = data.influencers.length;
+  setTimeout(() => { closeModal(); renderInfTable(); }, 1500);
 }
 
-function retryQuiz(){
-  document.getElementById('pg-result').style.display='none';
-  startQuiz();
+/* ========== CSV Import ========== */
+function importCSVFile() { document.getElementById('csvFileInput').click(); }
+
+function handleCSVUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const text = e.target.result.replace(/^\uFEFF/, '');
+    const lines = text.split(/\n/).filter(l => l.trim());
+    if (lines.length < 2) { showToast('CSV文件至少需要表头+1行数据'); return; }
+    
+    // Parse header
+    const headers = parseCSVLine(lines[0]);
+    const data = DB.get();
+    let added = 0;
+    const existingNames = new Set(data.influencers.map(i => i.name));
+    
+    for (let i = 1; i < lines.length; i++) {
+      const values = parseCSVLine(lines[i]);
+      const name = values[0]?.trim();
+      if (!name || existingNames.has(name)) continue;
+      
+      const newInf = {
+        id: uid('inf'), name: name, status: '待筛选',
+        followersWan: 0, followers: 0, views: 0, likes: 0, saves: 0,
+        shares: 0, cost: 0, totalEngagement: 0, source: 'CSV导入', notes: ''
+      };
+      
+      // Map by header name
+      headers.forEach((h, idx) => {
+        const val = values[idx]?.trim() || '';
+        const hLower = h.toLowerCase();
+        if (h.includes('博主') || h.includes('名称')) newInf.name = val;
+        else if (h.includes('链接') || h.includes('主页')) newInf.homepageUrl = val;
+        else if (h.includes('粉丝')) { newInf.followersWan = parseFloat(val) || 0; newInf.followers = Math.round(newInf.followersWan * 10000); }
+        else if (h.includes('报备') || h.includes('水下')) newInf.coopType = val;
+        else if (h.includes('分类')) newInf.category = val;
+        else if (h.includes('联系人')) newInf.contactPerson = val;
+        else if (h.includes('联系方式')) newInf.contactInfo = val;
+        else if (h.includes('亮点')) newInf.highlights = val;
+        else if (h.includes('价格')) newInf.finalPrice = val;
+        else if (h.includes('成本')) newInf.cost = parseInt(val) || 0;
+        else if (h.includes('播放')) newInf.views = parseInt(val) || 0;
+        else if (h.includes('点赞')) newInf.likes = parseInt(val) || 0;
+        else if (h.includes('收藏')) newInf.saves = parseInt(val) || 0;
+        else if (h.includes('分享')) newInf.shares = parseInt(val) || 0;
+        else if (h.includes('互动')) newInf.totalEngagement = parseInt(val) || 0;
+        else if (h.includes('备注')) newInf.notes = val;
+        else if (h.includes('日期') || h.includes('发布')) newInf.publishDate = val;
+        else if (h.includes('平台')) newInf.syncPlatform = val;
+        else if (h.includes('兑换')) newInf.redemptionCode = val;
+        else if (h.includes('状态')) newInf.status = val;
+      });
+      
+      newInf.totalEngagement = newInf.totalEngagement || (newInf.views + newInf.likes + newInf.saves);
+      data.influencers.push(newInf);
+      existingNames.add(name);
+      added++;
+    }
+    
+    DB.save(data);
+    showToast('CSV导入 ' + added + ' 条达人');
+    document.getElementById('navInfCount').textContent = data.influencers.length;
+    renderInfTable();
+  };
+  reader.readAsText(file, 'UTF-8');
+  event.target.value = '';
 }
 
-// ===================== 弹窗 =====================
-function openModal(code){
-  const d=TYPES[code];
-  document.getElementById('m-emoji').textContent=d.emoji;
-  document.getElementById('m-code').textContent=code;
-  document.getElementById('m-name').textContent=d.name;
-  const ma=document.getElementById('m-alias');
-  ma.innerHTML='';
-  d.alias.forEach(a=>{const s=document.createElement('span');s.textContent=a;ma.appendChild(s);});
-  document.getElementById('m-setting').textContent=d.setting;
-  document.getElementById('m-quote').innerHTML=`🗣 <em>"${d.quote}"</em>`;
-  document.getElementById('modal').classList.add('on');
+function parseCSVLine(line) {
+  const result = [];
+  let current = '', inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') { inQuotes = !inQuotes; }
+    else if ((c === ',' || c === '\t') && !inQuotes) { result.push(current); current = ''; }
+    else { current += c; }
+  }
+  result.push(current);
+  return result;
 }
-function closeM(e){
-  if(e&&e.target!==document.getElementById('modal'))return;
-  document.getElementById('modal').classList.remove('on');
+
+/* ========== Tencent Docs Sync ========== */
+function syncFromTencentDocs() {
+  document.getElementById('modalContent').innerHTML = `
+    <div class="modal-header"><div class="modal-title">从腾讯文档同步</div><div class="modal-close" onclick="closeModal()">&times;</div></div>
+    <div class="modal-body">
+      <div style="text-align:center;padding:20px 0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5" style="width:48px;height:48px;margin-bottom:16px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <p style="font-size:15px;font-weight:600;margin-bottom:8px">从腾讯文档拉取最新数据</p>
+        <p style="color:var(--text-secondary);font-size:13px;margin-bottom:20px">点击下方按钮，在WorkBuddy对话中发送"同步达人数据"，<br>我会从腾讯文档读取最新表格数据并更新工作台。</p>
+        <div style="background:var(--bg);border-radius:8px;padding:16px;margin-bottom:16px;text-align:left">
+          <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px"><b>操作步骤：</b></p>
+          <ol style="font-size:13px;color:var(--text-secondary);padding-left:20px;line-height:1.8">
+            <li>导出当前工作台数据作为备份</li>
+            <li>在WorkBuddy对话中发送"同步达人数据"</li>
+            <li>我会读取腾讯文档最新表格</li>
+            <li>生成新的工作台数据并重新部署</li>
+          </ol>
+        </div>
+        <button class="btn btn-primary" onclick="exportJSON();closeModal()">先导出备份</button>
+        <button class="btn btn-outline" onclick="closeModal()">知道了</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('modalOverlay').classList.add('show');
 }
+document.getElementById('modalOverlay').addEventListener('click', function(e) { if(e.target===this) closeModal(); });
+
+renderPage();
 </script>
 </body>
 </html>
