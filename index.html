@@ -505,7 +505,7 @@ function renderInfTable() {
           <td>${escapeHtml(inf.contactPerson||'-')}</td>
           <td>${escapeHtml(inf.contactInfo||'-')}</td>
           <td style="max-width:150px" title="${escapeHtml(inf.highlights||'')}">${escapeHtml(inf.highlights||'-')}</td>
-          <td title="${escapeHtml(inf.finalPrice||'')}" style="max-width:120px">${escapeHtml((inf.finalPrice||'-').substring(0,20))}${inf.finalPrice&&inf.finalPrice.length>20?'...':''}</td>
+          <td title="${escapeHtml(inf.finalPrice||'')}" style="max-width:220px;white-space:pre-wrap;font-size:12px;line-height:1.55;word-break:break-word">${escapeHtml(inf.finalPrice||'-')}</td>
           <td>${inf.cost?'\u00a5'+inf.cost:'-'}</td>
           <td>${fmt(inf.views)}</td>
           <td>${fmt(inf.likes)}</td>
@@ -771,7 +771,7 @@ function renderCampaigns() {
                   <td>${inf.homepageUrl?'<a class="btn btn-outline" style="padding:3px 10px;font-size:12px;white-space:nowrap" href="'+inf.homepageUrl+'" target="_blank">主页 \u2197</a>':'-'}</td>
                   <td>${inf.coopType?'<span class="badge '+(inf.coopType.includes('报备')?'badge-primary':'badge-warning')+'">'+escapeHtml(inf.coopType)+'</span>':'-'}</td>
                   <td>${escapeHtml(inf.category||'-')}</td>
-                  <td title="${escapeHtml(inf.finalPrice||'')}" style="max-width:120px">${escapeHtml((inf.finalPrice||'-').substring(0,15))}${inf.finalPrice&&inf.finalPrice.length>15?'...':''}</td>
+                  <td title="${escapeHtml(inf.finalPrice||'')}" style="max-width:220px;white-space:pre-wrap;font-size:12px;line-height:1.55;word-break:break-word">${escapeHtml(inf.finalPrice||'-')}</td>
                   <td>${inf.cost?'\u00a5'+inf.cost:'-'}</td>
                   <td style="min-width:200px;max-width:240px;font-size:12px">${formatTimeline(inf.timeline)}</td>
                   <td><b style="color:#ef4444">${escapeHtml(extractPublishDate(inf.timeline) || inf.publishDate || '-')}</b></td>
