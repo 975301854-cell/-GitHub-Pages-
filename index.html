@@ -735,7 +735,7 @@ function renderReport(inf) {
   `;
 }
 
-let campaignTab = '7月';
+let campaignTab = '8月';
 /* ========== Campaigns ========== */
 function renderCampaigns() {
   const data = DB.get();
@@ -756,8 +756,8 @@ function renderCampaigns() {
       <div class="card-header"><div class="card-title">投放管理</div></div>
       <div class="card-body">
         <div class="camp-tabs">
-          <button class="camp-tab ${campaignTab==='7月'?'active':''}" onclick="switchCampaignTab('7月')">7月合作达人<span class="cnt">(${july.length})</span></button>
           <button class="camp-tab ${campaignTab==='8月'?'active':''}" onclick="switchCampaignTab('8月')">8月合作达人<span class="cnt">(${august.length})</span></button>
+          <button class="camp-tab ${campaignTab==='7月'?'active':''}" onclick="switchCampaignTab('7月')">7月合作达人<span class="cnt">(${july.length})</span></button>
           ${other.length>0?'<button class="camp-tab '+(campaignTab==='其他'?'active':'')+'" onclick="switchCampaignTab(\'其他\')">其他已合作<span class="cnt">('+other.length+')</span></button>':''}
         </div>
         <div class="camp-summary">当前视图：<b>${campaignTab==='7月'?'7月合作达人':campaignTab==='8月'?'8月合作达人':'其他已合作'}</b> &nbsp;|&nbsp; 达人 <b>${list.length}</b> 位 &nbsp;|&nbsp; 成本小计 <b>\u00a5${fmt(totalCost)}</b> &nbsp;|&nbsp; 曝光小计 <b>${fmt(totalViews)}</b></div>
