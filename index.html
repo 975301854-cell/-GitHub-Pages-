@@ -773,8 +773,8 @@ function renderCampaigns() {
                   <td>${escapeHtml(inf.category||'-')}</td>
                   <td title="${escapeHtml(inf.finalPrice||'')}" style="max-width:120px">${escapeHtml((inf.finalPrice||'-').substring(0,15))}${inf.finalPrice&&inf.finalPrice.length>15?'...':''}</td>
                   <td>${inf.cost?'\u00a5'+inf.cost:'-'}</td>
-                  <td title="${escapeHtml(inf.timeline||'')}" style="font-size:12px;white-space:pre-wrap;max-width:220px;line-height:1.5;color:var(--text-secondary)">${escapeHtml(inf.timeline||'-')}</td>
-                  <td>${escapeHtml(inf.publishDate||'-')}</td>
+                  <td style="min-width:200px;max-width:240px;font-size:12px">${formatTimeline(inf.timeline)}</td>
+                  <td><b style="color:#ef4444">${escapeHtml(extractPublishDate(inf.timeline) || inf.publishDate || '-')}</b></td>
                   <td>${escapeHtml(inf.syncPlatform||'-')}</td>
                   <td>${escapeHtml(inf.redemptionCode||'-')}</td>
                   <td>${fmt(inf.views)}</td>
@@ -790,6 +790,35 @@ function renderCampaigns() {
       </div>
     </div>
   `;
+}
+
+
+function formatTimeline(raw) {
+  if (!raw) return '<span style="color:var(--text-tertiary)">-</span>';
+  const items = [];
+  const rules = [
+    { re: /大纲(?:时间)?\s*[:：]\s*([^\n]+)/, icon: '📝', label: '大纲', color: '#6366f1' },
+    { re: /脚本(?:时间)?\s*[:：]\s*([^\n]+)/, icon: '📜', label: '脚本', color: '#8b5cf6' },
+    { re: /初稿(?:时间)?\s*[:：]\s*([^\n]+)/, icon: '✏️', label: '初稿', color: '#06b6d4' },
+    { re: /(?:发|发.?)稿?时间\s*[:：]\s*([^\n]+)/, icon: '🚀', label: '发布', color: '#ef4444' }
+  ];
+  for (const r of rules) {
+    const m = raw.match(r.re);
+    if (m) {
+      const v = m[1].trim();
+      if (v && v !== '/' && v !== '-') {
+        items.push(`<div style="display:flex;align-items:center;gap:4px;margin:2px 0;line-height:1.4"><span style="font-size:11px">${r.icon}</span><span style="color:${r.color};font-weight:500">${escapeHtml(r.label)}</span><span style="color:var(--text-primary)">${escapeHtml(v)}</span></div>`);
+      }
+    }
+  }
+  if (items.length === 0) return `<span title="${escapeHtml(raw)}" style="color:var(--text-tertiary);font-size:11px;white-space:pre-wrap">${escapeHtml(raw)}</span>`;
+  return items.join('');
+}
+
+function extractPublishDate(raw) {
+  if (!raw) return '';
+  const m = raw.match(/(?:发布?|发[布文]?(?:时间|稿)?|发[文稿]?时间)\s*[:：]\s*([^\n]+)/);
+  return m ? m[1].trim() : '';
 }
 
 function switchCampaignTab(tab) {
